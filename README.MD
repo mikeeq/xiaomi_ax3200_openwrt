@@ -80,7 +80,7 @@ Password:
    # cat /proc/mtd
    ```
 
-4. SCP (copy over SSH) `factory.bin` and `rootfs.ubi` and
+4. SCP (copy over SSH) `factory.bin` and `rootfs.ubi`
 
    ```bash
    # Create temporary directory

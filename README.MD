@@ -37,8 +37,8 @@ Password:
    cd xiaomi_openwrt
 
    # Pull scripts for generating telnet password
-   curl -Ls -o ./script.sh
-   curl -Ls -o ./password.py
+   curl -Ls https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/script.sh -o ./script.sh
+   curl -Ls https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/password.py -o ./password.py
 
    # Replace <STOK> with the session token grabbed from the login URL after initial setup
    ## http://192.168.31.1/cgi-bin/luci/;stok=1675d313f8c5d384e191b653c44c5e3a/web/home#router
@@ -83,8 +83,8 @@ Password:
    cd xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -Ls -o factory.bin
-   curl -Ls -o rootfs.ubi
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220222-thorsten97/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o factory.bin
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220222-thorsten97/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-rootfs.ubi -o rootfs.ubi
 
    # Copy images over SSH to router
    cd ../

@@ -1,7 +1,7 @@
 ---
 name: Build OpenWRT
 
-on: [push]
+# on: [push]
 
 jobs:
   build:

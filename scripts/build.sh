@@ -24,7 +24,7 @@ echo "Download packages before build"
 if [ "$opt" = "nodownload" ]; then
    echo "Skipping download of packages.."
 else
-   make download
+   make V=sc download
 fi
 
 echo "Start build and log to build.log"

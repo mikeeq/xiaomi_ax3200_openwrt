@@ -163,9 +163,14 @@ root@OpenWrt:/# dmesg | grep -i xia
 
 ## Docs
 
+Main:
 - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085>
 - <https://github.com/openwrt/openwrt/pull/4810/commits/6dc598a880aa79eb2fe5b3e8a04bc23a96256cb2>
 - <https://github.com/acecilia/OpenWRTInvasion>
+- <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
+
+Additional:
+
 - <https://blog.csdn.net/zhoujiazhao/article/details/102578244>
 - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
 - <https://openwrt.org/toh/xiaomi/ax3200>

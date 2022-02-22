@@ -26,6 +26,7 @@ steps:
     commands:
       - apk add --no-cache curl
       - curl -Ls https://github.com/AkihiroSuda/clone3-workaround/releases/download/v1.0.0/clone3-workaround.x86_64 -o /tmp/workaround/clone3-workaround
+      - chmod +x /tmp/workaround/clone3-workaround
 
   - name: build
     image: ubuntu:21.10

@@ -23,7 +23,12 @@ XiaoQiang login: root
 Password:
 ```
 
-### Tutorial: How to install OpenWRT
+### Known Issues
+
+- 160Hz wide 5GHz channels don't work [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
+- Smaller coverage area comparing to stock firmware
+
+## Tutorial: How to install OpenWRT
 
 0. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
@@ -120,6 +125,8 @@ Password:
    - You must set the ip address 192.168.31.100 on your pc, and you can use Xiaomi Recovery Tool.
 If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
    - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
+   - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
+   - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
 
 ## Luci Overview
 
@@ -165,6 +172,7 @@ root@OpenWrt:/# dmesg | grep -i xia
 - <https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/>
 - <https://openwrt.org/docs/guide-user/additional-software/imagebuilder>
 - <https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem>
+- <https://docs.mudfish.net/en/docs/mudfish-cloud-vpn/router-openwrt-install-firmware/>
 
 ## Credits
 

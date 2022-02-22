@@ -10,6 +10,8 @@ pwd
 echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
+cd $SCRIPT_PATH
+
 USERID=1000
 GROUPID=1000
 

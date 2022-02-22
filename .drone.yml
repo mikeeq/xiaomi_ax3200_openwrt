@@ -37,7 +37,7 @@ steps:
       - name: build-artifacts
         path: /tmp/artifacts
     commands:
-      - /tmp/workaround/clone3-workaround build_in_docker.sh
+      - /tmp/workaround/clone3-workaround /drone/src/build_in_docker.sh
 
   - name: publish-github
     image: plugins/github-release

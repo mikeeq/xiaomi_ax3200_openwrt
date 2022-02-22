@@ -53,7 +53,7 @@ Password:
    # look for telnet_en=1 or "telnet":true
    ```
 
-   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
+   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
 
 3. Start SSHd on router using telnet
 
@@ -119,9 +119,9 @@ Password:
 
 6. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
 
-   > If something go wrong make sure that you've tried to restart your NIC to grab fresh IP from DHCP
+   > If something went wrong make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
 
-7. If you're sure that you've bricked your device there'a recovery TFTP mode:
+7. If you're sure that you've bricked your device there's a recovery TFTP mode to restore stock firmware:
    - You must set the ip address 192.168.31.100 on your pc, and you can use Xiaomi Recovery Tool.
 If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
    - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>

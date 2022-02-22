@@ -64,4 +64,4 @@ else
   ./run-build.sh build-official
 fi
 
-find bin/.
+find bin/ | grep -i ".bin"

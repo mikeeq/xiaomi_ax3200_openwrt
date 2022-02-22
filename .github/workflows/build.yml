@@ -1,0 +1,23 @@
+---
+name: Build OpenWRT
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Build OpenWRT"
+        run: ./build.sh
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          draft: true
+          files: |
+            ./xiaomi_openwrt/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # You don't need to add this in secrets it's by default.

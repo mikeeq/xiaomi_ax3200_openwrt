@@ -30,10 +30,10 @@ git clone ${OPENWRT_NAMIDAIRO_GIT_URL} ${OPENWRT_NAMIDAIRO_GIT_PATH}
 cd ${OPENWRT_NAMIDAIRO_GIT_PATH}
 git checkout ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME}
 
-git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > /tmp/patchfile
+git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > /tmp/openwrt/patchfile
 
 cd ${OPENWRT_GIT_PATH}
-git apply /tmp/patchfile
+git apply /tmp/openwrt/patchfile
 
 echo "===]> Info: Add build scripts"
 
@@ -64,4 +64,5 @@ else
   ./run-build.sh build-official
 fi
 
+cd ${OPENWRT_GIT_PATH}
 find bin/ | grep -i ".bin"

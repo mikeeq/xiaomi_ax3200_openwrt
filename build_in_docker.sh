@@ -32,7 +32,7 @@ export CMAKE_CXX_COMPILER=clang++-12
 apt-get update && \
 apt-get install -y time git-core subversion build-essential ccache ecj fastjar file screen quilt libncursesw5-dev libssl-dev \
   g++ java-propose-classpath libelf-dev bash make patch libncurses5 libncurses5-dev zlib1g-dev gawk \
-  flex gettext wget unzip xz-utils python3 python3-distutils-extra rsync \
+  flex gettext wget unzip xz-utils python python-distutils-extra python3 python3-distutils-extra rsync \
   python3-setuptools python3-dev swig xsltproc zlib1g-dev llvm clang-12 && \
 apt-get clean && \
 groupadd --gid $GROUPID buser && \

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 

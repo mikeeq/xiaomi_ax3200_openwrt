@@ -1,5 +1,6 @@
 ---
 kind: pipeline
+type: docker
 name: xiaomi_ax3200_openwrt
 
 trigger:
@@ -17,27 +18,14 @@ steps:
   #     - yamllint .
   #     - shellcheck ./*.sh
 
-  - name: fix
-    image: alpine:3.14
-    pull: always
-    volumes:
-      - name: workaround
-        path: /tmp/workaround
-    commands:
-      - apk add --no-cache curl
-      - curl -Ls https://github.com/AkihiroSuda/clone3-workaround/releases/download/v1.0.0/clone3-workaround.x86_64 -o /tmp/workaround/clone3-workaround
-      - chmod +x /tmp/workaround/clone3-workaround
-
   - name: build
     image: ubuntu:21.10
     pull: always
     volumes:
-      - name: workaround
-        path: /tmp/workaround
       - name: build-artifacts
         path: /tmp/artifacts
     commands:
-      - /tmp/workaround/clone3-workaround /bin/bash -c "/drone/src/build_in_docker.sh"
+      - ./build_in_docker.sh
 
   - name: publish-github
     image: plugins/github-release
@@ -54,6 +42,4 @@ steps:
 
 volumes:
   - name: build-artifacts
-    temp: {}
-  - name: workaround
     temp: {}

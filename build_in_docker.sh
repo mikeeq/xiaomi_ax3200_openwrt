@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 
@@ -18,14 +20,14 @@ chown -R $USERID:$GROUPID $SCRIPT_PATH
 apt-get update && \
 apt-get install -y sudo curl vim gnupg
 
-# echo "
-# deb http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main
-# deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main" >> /etc/apt/sources.list
+echo "
+deb http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main
+deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main" >> /etc/apt/sources.list
 
-# curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 
-# export CMAKE_C_COMPILER=clang-12
-# export CMAKE_CXX_COMPILER=clang++-12
+export CMAKE_C_COMPILER=clang-12
+export CMAKE_CXX_COMPILER=clang++-12
 
 apt-get update && \
 apt-get install -y time git-core subversion build-essential ccache ecj fastjar file screen quilt libncursesw5-dev libssl-dev \

@@ -43,6 +43,8 @@ echo "===]> Info: Add build scripts"
 
 curl -Ls  https://gitlab.com/db260179/openwrt-base/-/archive/master/openwrt-base-master.zip?path=docker -o docker.zip
 unzip docker.zip
+mv openwrt-base-master-docker/docker ./
+rm -rfv docker.zip openwrt-base-master-docker
 
 curl -Ls https://gitlab.com/db260179/openwrt-base/-/raw/master/build.sh?inline=false -o build.sh
 chmod +x build.sh

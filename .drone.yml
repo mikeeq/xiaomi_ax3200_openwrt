@@ -18,7 +18,7 @@ steps:
   #     - shellcheck ./*.sh
 
   - name: build
-    image: debian:buster
+    image: ubuntu:21.10
     pull: always
     volumes:
       - name: build-artifacts

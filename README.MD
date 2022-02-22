@@ -1,5 +1,6 @@
 # Xiaomi Router AX6S / AX3200 OpenWRT
 
+[![Drone Build Status](https://cloud.drone.io/api/badges/mikeeq/mbp-fedora-kernel/status.svg)](https://cloud.drone.io/mikeeq/mbp-fedora-kernel)
 ## Overview
 
 I'm planning to add pipeline for building OpenWRT images, as for now you'll only find here a tutorial for installing already built images.

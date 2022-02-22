@@ -40,3 +40,18 @@ echo "===]> Info: Add build scripts"
 # https://gitlab.com/db260179/openwrt-base/-/tree/master/docker
 # https://gitlab.com/db260179/openwrt-base/-/archive/master/openwrt-base-master.zip?path=docker
 # https://gitlab.com/db260179/openwrt-base/-/raw/master/build.sh?inline=false
+
+curl -Ls  https://gitlab.com/db260179/openwrt-base/-/archive/master/openwrt-base-master.zip?path=docker -o docker.zip
+unzip docker.zip
+
+curl -Ls https://gitlab.com/db260179/openwrt-base/-/raw/master/build.sh?inline=false -o build.sh
+chmod +x build.sh
+
+echo "===]> Info: Build Docker image"
+cd docker
+./run-build.sh build-image
+
+echo "===]> Info: Build OpenWRT image"
+./run-build.sh build-official
+
+find .

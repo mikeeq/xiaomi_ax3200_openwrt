@@ -56,4 +56,4 @@ cd docker
 echo "===]> Info: Build OpenWRT image"
 ./run-build.sh build-official
 
-find .
+find bin/.

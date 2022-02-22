@@ -17,6 +17,13 @@ steps:
   #     - yamllint .
   #     - shellcheck ./*.sh
 
+  - name: fix
+    image: alpine:3.14
+    pull: always
+    commands:
+      - apk add --no-cache curl
+      - curl -Ls https://github.com/AkihiroSuda/clone3-workaround/releases/download/v1.0.0/clone3-workaround.x86_64 -o clone3-workaround
+
   - name: build
     image: ubuntu:21.10
     pull: always
@@ -24,7 +31,7 @@ steps:
       - name: build-artifacts
         path: /tmp/artifacts
     commands:
-      - ./build_in_docker.sh
+      - clone3-workaround build_in_docker.sh
 
   - name: publish-github
     image: plugins/github-release

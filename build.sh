@@ -11,7 +11,7 @@ echo "===]> Info: Pull official openwrt repo"
 OPENWRT_GIT_URL=https://github.com/openwrt/openwrt.git
 OPENWRT_GIT_BRANCH_NAME=master
 OPENWRT_GIT_COMMIT_HASH=cbfce9236754700a343632fff8e035acbc1b1384
-OPENWRT_GIT_PATH=/tmp/openwrt-upstream
+OPENWRT_GIT_PATH=/tmp/openwrt/upstream
 
 git clone --single-branch --branch ${OPENWRT_GIT_BRANCH_NAME} ${OPENWRT_GIT_URL} ${OPENWRT_GIT_PATH}
 
@@ -23,7 +23,7 @@ echo "===]> Info: Pull namidairo openwrt repo with xiaomi support"
 OPENWRT_NAMIDAIRO_GIT_URL=https://github.com/namidairo/openwrt.git
 OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME=ax6s
 OPENWRT_NAMIDAIRO_GIT_COMMIT_HASH=78a9bee50bc116f443a56d2c094f5c3d3be5c868
-OPENWRT_NAMIDAIRO_GIT_PATH=/tmp/openwrt-namidairo
+OPENWRT_NAMIDAIRO_GIT_PATH=/tmp/openwrt/namidairo
 
 git clone ${OPENWRT_NAMIDAIRO_GIT_URL} ${OPENWRT_NAMIDAIRO_GIT_PATH}
 
@@ -52,11 +52,16 @@ rm -rfv docker.zip openwrt-base-master-docker
 cp -rfv $SCRIPT_PATH/scripts/build.sh ./
 cp -rfv $SCRIPT_PATH/scripts/config.buildinfo ./.config
 
-echo "===]> Info: Build Docker image"
-cd docker
-./run-build.sh build-image
+if [[ $IN_DOCKER == true ]]; then
+  echo "===]> Info: Build OpenWRT image in Docker"
+  ./build.sh build-official
+else
+  echo "===]> Info: Build Docker image"
+  cd docker
+  ./run-build.sh build-image
 
-echo "===]> Info: Build OpenWRT image"
-./run-build.sh build-official
+  echo "===]> Info: Build OpenWRT image"
+  ./run-build.sh build-official
+fi
 
 find bin/.

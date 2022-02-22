@@ -26,4 +26,4 @@ groupadd --gid $GROUPID buser && \
 useradd --uid $USERID --gid $GROUPID -m -s /bin/bash buser
 
 echo "===]> Info: Run ./build.sh"
-./build.sh
+IN_DOCKER=true ./build.sh

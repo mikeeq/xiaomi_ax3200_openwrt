@@ -6,9 +6,11 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 600
     steps:
       - uses: actions/checkout@v2
       - name: "Build OpenWRT"
+        timeout-minutes: 600
         run: ./build.sh
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -21,3 +23,5 @@ jobs:
             ./xiaomi_openwrt/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # You don't need to add this in secrets it's by default.
+
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions

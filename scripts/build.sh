@@ -2,6 +2,16 @@
 
 opt=$2
 
+BUILD_VERBOSE=false
+
+if [[ $BUILD_VERBOSE == true ]]; then
+  DOWNLOAD_VERBOSE="V=sc"
+  MAKE_VERBOSE="V=s"
+else
+  DOWNLOAD_VERBOSE=""
+  MAKE_VERBOSE=""
+fi
+
 build-official () {
 echo "Update feeds..."
 ./scripts/feeds update -a
@@ -24,23 +34,23 @@ echo "Download packages before build"
 if [ "$opt" = "nodownload" ]; then
    echo "Skipping download of packages.."
 else
-   make V=sc download
+   make $DOWNLOAD_VERBOSE download
 fi
 
 echo "Start build and log to build.log"
-make -j$(($(nproc)+1)) V=s CONFIG_DEBUG_SECTION_MISMATCH=y 2>&1 | tee build.log
+make -j$(($(nproc)+1)) $MAKE_VERBOSE CONFIG_DEBUG_SECTION_MISMATCH=y 2>&1 | tee build.log
 }
 
 build-rebuild () {
 make clean
 make defconfig
 echo "Start build and log to build.log"
-make -j$(($(nproc)+1)) V=s CONFIG_DEBUG_SECTION_MISMATCH=y 2>&1 | tee build.log | grep -i -E "^make.*(error|[12345]...Entering dir)"
+make -j$(($(nproc)+1)) $MAKE_VERBOSE CONFIG_DEBUG_SECTION_MISMATCH=y 2>&1 | tee build.log | grep -i -E "^make.*(error|[12345]...Entering dir)"
 }
 
 build-rebuild-ignore () {
 echo "Start build and log to build.log - Ignoring build errors..."
-make -i -j$(($(nproc)+1)) V=s CONFIG_DEBUG_SECTION_MISMATCH=y 2>&1 | tee build.log | grep -i -E "^make.*(error|[12345]...Entering dir)"
+make -i -j$(($(nproc)+1)) $MAKE_VERBOSE CONFIG_DEBUG_SECTION_MISMATCH=y 2>&1 | tee build.log | grep -i -E "^make.*(error|[12345]...Entering dir)"
 }
 
 clean-min () {

@@ -1,7 +1,8 @@
 ---
 name: Build OpenWRT
 
-# on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
   build:

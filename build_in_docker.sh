@@ -16,11 +16,23 @@ GROUPID=1000
 chown -R $USERID:$GROUPID $SCRIPT_PATH
 
 apt-get update && \
+apt-get install -y sudo curl vim gnupg
+
+echo "
+deb http://apt.llvm.org/buster/ llvm-toolchain-buster main
+deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster main
+deb http://apt.llvm.org/buster/ llvm-toolchain-buster-10 main
+deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-10 main
+deb http://apt.llvm.org/buster/ llvm-toolchain-buster-11 main
+deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-11 main" >> /etc/apt/sources.list
+
+curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+
+apt-get update && \
 apt-get install -y time git-core subversion build-essential ccache ecj fastjar file screen quilt libncursesw5-dev libssl-dev \
   g++ java-propose-classpath libelf-dev bash make patch libncurses5 libncurses5-dev zlib1g-dev gawk \
   flex gettext wget unzip xz-utils python python-distutils-extra python3 python3-distutils-extra rsync \
-  python3-setuptools python3-dev swig xsltproc zlib1g-dev llvm clang nano \
-    sudo curl && \
+  python3-setuptools python3-dev swig xsltproc zlib1g-dev llvm clang-11 && \
 apt-get clean && \
 groupadd --gid $GROUPID buser && \
 useradd --uid $USERID --gid $GROUPID -m -s /bin/bash buser

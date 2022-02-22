@@ -67,4 +67,11 @@ else
 fi
 
 cd ${OPENWRT_GIT_PATH}
-find bin/ | grep -i ".bin"
+# find bin/ | grep -i ".bin"
+ls -ltr bin/targets/mediatek/mt7622/ | grep -i -e ".img" -e ".bin"
+
+cp -rfv bin/targets/mediatek/mt7622/*.bin /tmp/artifacts/
+cp -rfv bin/targets/mediatek/mt7622/*.img /tmp/artifacts/
+cp -rfv bin/targets/mediatek/mt7622/profiles.json /tmp/artifacts/
+cp -rfv bin/targets/mediatek/mt7622/sha256sums /tmp/artifacts/
+cp -rfv /tmp/openwrt/patchfile /tmp/artifacts/

@@ -121,8 +121,11 @@ Password:
 If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
    - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
 
+## Luci Overview
 
-### SSH Output from OpenWRT after successful flash
+![Luci](images/luci.png)
+
+## SSH Output from successfully flashed OpenWRT
 
 ```bash
 ❯ ssh root@192.168.1.1

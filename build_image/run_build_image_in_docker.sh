@@ -9,8 +9,8 @@ source helpers/functions.sh
 inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
 
-# DOCKER_IMAGE=debian:buster
-DOCKER_IMAGE=openwrt
+DOCKER_IMAGE=debian:buster
+# DOCKER_IMAGE=openwrt
 RUN_SHELL=${RUN_SHELL:-false}
 SKIP_PULL=${SKIP_PULL:-true}
 

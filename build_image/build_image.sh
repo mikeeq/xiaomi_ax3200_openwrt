@@ -43,7 +43,7 @@ if [[ ${SKIP_PULL:-false} == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
   inf "Apply namidairo patches to upstream repo"
   cd "${OPENWRT_GIT_PATH}"
   # git apply "${OPENWRT_PATH}"/patchfile
-  git apply "${SCRIPT_PATH}"/files/ax3200.patch
+  git apply "${SCRIPT_PATH}"/files/ax3200_78a9bee.patch
 fi
 
 inf "Add build scripts"

@@ -4,7 +4,7 @@
 
 ## Overview
 
-I'm planning to add pipeline for building OpenWRT images, as for now you'll only find here a tutorial for installing already built images.
+Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and tutorial how to install it.
 
 ## Tested HW
 
@@ -90,8 +90,7 @@ Password:
    cd xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220222-thorsten97/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o factory.bin
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220222-thorsten97/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-rootfs.ubi -o rootfs.ubi
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220223-master-test/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o sysupgrade.bin
 
    # Copy images over SSH to router
    cd ../
@@ -105,7 +104,7 @@ Password:
    ssh root@192.168.31.1
    cd /tmp/xiaomi_openwrt_images
 
-   # Validate those checksums against checksums found in github releases file sha256
+   # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
 
    # Set NVRAM flags
@@ -113,10 +112,8 @@ Password:
    nvram set flag_try_sys1_failed=0
    nvram set flag_try_sys2_failed=0
 
-   # Flash images
-   mtd write factory.bin firmware
-   mtd write factory.bin firmware1
-   mtd write -r rootfs.ubi overlay
+   # Flash image
+   mtd -r write sysupgrade.bin firmware
    ```
 
 6. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>

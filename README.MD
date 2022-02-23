@@ -29,6 +29,21 @@ Password:
 
 - 160Hz wide 5GHz channels don't work [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
 - Smaller coverage area comparing to stock firmware
+- Error when building package qosify, [link](https://forum.openwrt.org/t/qosify-on-rt3200-possible/111277/3?u=mikeeq)
+
+  ```bash
+  aarch64-openwrt-linux-musl-gcc: command not found
+
+  make[1]: [package/Makefile:115: package/network/config/qosify/download] Error 2 (ignored)
+  make[2]: Entering directory '/repo/openwrt/upstream/package/network/config/qosify'
+  bash: /repo/openwrt/upstream/staging_dir/host/llvm-bpf/bin/clang: No such file or directory
+  bash: line 0: [: : integer expression expected
+  /repo/openwrt/upstream/include/bpf.mk:70: *** ERROR: LLVM/clang version too old. Minimum required: 12, found: .  Stop.
+  make[2]: Leaving directory '/repo/openwrt/upstream/package/network/config/qosify'
+  time: package/network/config/qosify/download#0.03#0.01#0.04
+      ERROR: package/network/config/qosify failed to build.
+  make[1]: *** [package/Makefile:116: package/network/config/qosify/download] Error 1
+  ```
 
 ## Tutorial: How to install OpenWRT
 

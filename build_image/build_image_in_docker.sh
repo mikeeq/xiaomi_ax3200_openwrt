@@ -19,27 +19,41 @@ echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
 inf "Install system dependencies"
-apt-get update
-apt-get install -y sudo curl vim gnupg
 
-if ! grep -q llvm-toolchain-buster-12 /etc/apt/sources.list; then
-  inf "Adding clang-12 apt-get repo"
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y sudo curl vim gnupg apt-utils
+
+if ! grep -q llvm-toolchain-buster-13 /etc/apt/sources.list; then
+  inf "Adding clang-13 apt-get repo"
   echo "
-  deb http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main
-  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main" >> /etc/apt/sources.list
+  deb http://apt.llvm.org/buster/ llvm-toolchain-buster main
+  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster main
+  # 13
+  deb http://apt.llvm.org/buster/ llvm-toolchain-buster-13 main
+  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-13 main
+  # 14
+  deb http://apt.llvm.org/buster/ llvm-toolchain-buster-14 main
+  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-14 main" >> /etc/apt/sources.list
 
   curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 fi
 
-export CMAKE_C_COMPILER=clang-12
-export CMAKE_CXX_COMPILER=clang++-12
+# export CMAKE_C_COMPILER=clang-13
+# export CMAKE_CXX_COMPILER=clang++-13
 
 inf "Install build dependencies"
 apt-get update
 apt-get install -y time git-core subversion build-essential ccache ecj fastjar file screen quilt libncursesw5-dev libssl-dev \
   g++ java-propose-classpath libelf-dev bash make patch libncurses5 libncurses5-dev zlib1g-dev gawk \
   flex gettext wget unzip xz-utils python python-distutils-extra python3 python3-distutils-extra rsync \
-  python3-setuptools python3-dev swig xsltproc zlib1g-dev llvm clang-12
+  python3-setuptools python3-dev swig xsltproc zlib1g-dev
+
+apt-get install -y libllvm-13-ocaml-dev libllvm13 llvm-13 llvm-13-dev llvm-13-doc llvm-13-examples llvm-13-runtime
+
+apt-get install -y clang-13 clang-tools-13 clang-13-doc libclang-common-13-dev libclang-13-dev libclang1-13 clang-format-13 python3-clang-13 clangd-13 clang-tidy-13
+
+apt-get install -y lldb-13 lld-13
 
 if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   USER_ID=${USER_ID:-1000}
@@ -77,7 +91,7 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   # shellcheck disable=SC2046
   cp -rfv $(find . | grep bin/targets | grep -i sha256sum) "$ARTIFACTS_PATH/"
   cp -rfv "$OPENWRT_PATH"/upstream/.config "$ARTIFACTS_PATH/config.build"
-  cp -rfv "$OPENWRT_PATH"/patchfile "$ARTIFACTS_PATH/"
+  cp -rfv "$OPENWRT_PATH"/files/ax3200_78a9bee.patch "$ARTIFACTS_PATH/"
   cp -rfv "$SCRIPT_PATH"/files/config.buildinfo "$ARTIFACTS_PATH/config.buildinfo"
 
   sha256sum "$ARTIFACTS_PATH"/* > "$ARTIFACTS_PATH/sha256sums_artifacts_only"

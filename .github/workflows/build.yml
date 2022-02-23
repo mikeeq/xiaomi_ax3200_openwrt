@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: "Build OpenWRT"
         timeout-minutes: 600
-        run: ./build.sh
+        run: build_image/build_image.sh
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')

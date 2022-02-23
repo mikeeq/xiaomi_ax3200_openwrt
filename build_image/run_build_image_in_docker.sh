@@ -14,7 +14,13 @@ DOCKER_IMAGE=openwrt
 RUN_SHELL=${RUN_SHELL:-false}
 SKIP_PULL=${SKIP_PULL:-true}
 BUILD_VERBOSE=${BUILD_VERBOSE:-true}
-SKIP_DOWNLOAD=${SKIP_DOWNLOAD:-true}
+SKIP_DOWNLOAD=${SKIP_DOWNLOAD:-false}
+
+inf "DOCKER_IMAGE=$DOCKER_IMAGE"
+inf "RUN_SHELL=$RUN_SHELL"
+inf "SKIP_PULL=$SKIP_PULL"
+inf "BUILD_VERBOSE=$BUILD_VERBOSE"
+inf "SKIP_DOWNLOAD=$SKIP_DOWNLOAD"
 
 # docker build -t openwrt .
 
@@ -36,7 +42,7 @@ docker run \
   -e ARTIFACTS_PATH=/repo/artifacts \
   -e OPENWRT_PATH=/repo/openwrt \
   -e SKIP_PULL=$SKIP_PULL \
-  -e BUILD_VERBOS=$BUILD_VERBOSE \
+  -e BUILD_VERBOSE=$BUILD_VERBOSE \
   -e SKIP_DOWNLOAD=$SKIP_DOWNLOAD \
   -v "$(pwd)":/repo \
   -w /repo \

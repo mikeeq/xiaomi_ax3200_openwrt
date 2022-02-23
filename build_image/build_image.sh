@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -eu -o pipefail
+# set -x
 
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
@@ -11,15 +13,18 @@ inf "SCRIPT_PATH=$SCRIPT_PATH"
 
 OPENWRT_PATH=${OPENWRT_PATH:-/tmp/openwrt}
 
-set -x
+OPENWRT_GIT_URL=https://github.com/openwrt/openwrt.git
+OPENWRT_GIT_BRANCH_NAME=master
+OPENWRT_GIT_COMMIT_HASH=b9251e3b407592f3114e739231088c3d27663c4c
+OPENWRT_GIT_PATH=${OPENWRT_PATH}/upstream
+
+OPENWRT_NAMIDAIRO_GIT_URL=https://github.com/namidairo/openwrt.git
+OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME=ax6s
+# OPENWRT_NAMIDAIRO_GIT_COMMIT_HASH=78a9bee50bc116f443a56d2c094f5c3d3be5c868
+OPENWRT_NAMIDAIRO_GIT_PATH=${OPENWRT_PATH}/namidairo
 
 if [[ $SKIP_PULL == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
   inf "Pull official openwrt repo"
-
-  OPENWRT_GIT_URL=https://github.com/openwrt/openwrt.git
-  OPENWRT_GIT_BRANCH_NAME=master
-  OPENWRT_GIT_COMMIT_HASH=b9251e3b407592f3114e739231088c3d27663c4c
-  OPENWRT_GIT_PATH=${OPENWRT_PATH}/upstream
 
   git clone --single-branch --branch ${OPENWRT_GIT_BRANCH_NAME} ${OPENWRT_GIT_URL} ${OPENWRT_GIT_PATH}
 
@@ -28,23 +33,19 @@ if [[ $SKIP_PULL == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
 
   inf "Pull namidairo openwrt repo with xiaomi support"
 
-  OPENWRT_NAMIDAIRO_GIT_URL=https://github.com/namidairo/openwrt.git
-  OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME=ax6s
-  # OPENWRT_NAMIDAIRO_GIT_COMMIT_HASH=78a9bee50bc116f443a56d2c094f5c3d3be5c868
-  OPENWRT_NAMIDAIRO_GIT_PATH=${OPENWRT_PATH}/namidairo
-
   git clone ${OPENWRT_NAMIDAIRO_GIT_URL} ${OPENWRT_NAMIDAIRO_GIT_PATH}
 
   cd ${OPENWRT_NAMIDAIRO_GIT_PATH}
   git checkout ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME}
-
   git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > ${OPENWRT_PATH}/patchfile
 
+  inf "Apply namidairo patches to upstream repo"
   cd ${OPENWRT_GIT_PATH}
   git apply ${OPENWRT_PATH}/patchfile
 fi
 
 inf "Add build scripts"
+cd ${OPENWRT_GIT_PATH}
 
 # curl -Ls https://gitlab.com/db260179/openwrt-base/-/raw/master/build.sh?inline=false -o build.sh
 # chmod +x build.sh

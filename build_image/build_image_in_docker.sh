@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -eu -o pipefail
+# set -x
 
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
@@ -15,10 +17,12 @@ pwd
 echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
+inf "Install system dependencies"
 apt-get update
 apt-get install -y sudo curl vim gnupg
 
 if ! grep -q llvm-toolchain-buster-12 /etc/apt/sources.list; then
+  inf "Adding clang-12 apt-get repo"
   echo "
   deb http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main
   deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main" >> /etc/apt/sources.list
@@ -29,6 +33,7 @@ fi
 export CMAKE_C_COMPILER=clang-12
 export CMAKE_CXX_COMPILER=clang++-12
 
+inf "Install build dependencies"
 apt-get update
 apt-get install -y time git-core subversion build-essential ccache ecj fastjar file screen quilt libncursesw5-dev libssl-dev \
   g++ java-propose-classpath libelf-dev bash make patch libncurses5 libncurses5-dev zlib1g-dev gawk \
@@ -46,6 +51,7 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   inf "ARTIFACTS_PATH=$ARTIFACTS_PATH"
   inf "OPENWRT_PATH=$OPENWRT_PATH"
 
+  inf "Creating buser - build user"
   groupadd --gid $GROUP_ID buser
   useradd --uid $USER_ID --gid $GROUP_ID -m -s /bin/bash buser
 

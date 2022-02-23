@@ -29,7 +29,7 @@ echo "Set to use default config"
 make defconfig
 
 echo "Download packages before build"
-if [ "$opt" = "nodownload" ]; then
+if [[ "$opt" == "nodownload" && -d ./dl ]]; then
    echo "Skipping download of packages.."
 else
    make $DOWNLOAD_VERBOSE download

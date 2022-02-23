@@ -15,14 +15,16 @@ pwd
 echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
-apt-get update && \
+apt-get update
 apt-get install -y sudo curl vim gnupg
 
-echo "
-deb http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main
-deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main" >> /etc/apt/sources.list
+if ! grep -q llvm-toolchain-buster-12 /etc/apt/sources.list; then
+  echo "
+  deb http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main
+  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-12 main" >> /etc/apt/sources.list
 
-curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+  curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+fi
 
 export CMAKE_C_COMPILER=clang-12
 export CMAKE_CXX_COMPILER=clang++-12

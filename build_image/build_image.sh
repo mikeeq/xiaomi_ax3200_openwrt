@@ -23,7 +23,7 @@ OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME=ax6s
 # OPENWRT_NAMIDAIRO_GIT_COMMIT_HASH=78a9bee50bc116f443a56d2c094f5c3d3be5c868
 OPENWRT_NAMIDAIRO_GIT_PATH=${OPENWRT_PATH}/namidairo
 
-if [[ $SKIP_PULL == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
+if [[ ${SKIP_PULL:-false} == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
   inf "Pull official openwrt repo"
 
   git clone --single-branch --branch ${OPENWRT_GIT_BRANCH_NAME} ${OPENWRT_GIT_URL} ${OPENWRT_GIT_PATH}

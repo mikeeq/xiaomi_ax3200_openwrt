@@ -24,6 +24,9 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y sudo curl vim gnupg apt-utils
 
+# llvm requirements
+# apt-get install -y lsb-release wget software-properties-common
+
 if ! grep -q llvm-toolchain-buster-13 /etc/apt/sources.list; then
   inf "Adding clang-13 apt-get repo"
   echo "
@@ -49,11 +52,16 @@ apt-get install -y time git-core subversion build-essential ccache ecj fastjar f
   flex gettext wget unzip xz-utils python python-distutils-extra python3 python3-distutils-extra rsync \
   python3-setuptools python3-dev swig xsltproc zlib1g-dev
 
-apt-get install -y libllvm-13-ocaml-dev libllvm13 llvm-13 llvm-13-dev llvm-13-doc llvm-13-examples llvm-13-runtime
+apt-get install -y clang-13 llvm-13
 
-apt-get install -y clang-13 clang-tools-13 clang-13-doc libclang-common-13-dev libclang-13-dev libclang1-13 clang-format-13 python3-clang-13 clangd-13 clang-tidy-13
+# apt-get install -y libllvm-13-ocaml-dev libllvm13 llvm-13 llvm-13-dev llvm-13-doc llvm-13-examples llvm-13-runtime
+# apt-get install -y clang-13 clang-tools-13 clang-13-doc libclang-common-13-dev libclang-13-dev libclang1-13 clang-format-13 python3-clang-13 clangd-13 clang-tidy-13
+# apt-get install -y lldb-13 lld-13
+# apt-get install -y musl musl-dev musl-tools
 
-apt-get install -y lldb-13 lld-13
+# curl -Ls https://apt.llvm.org/llvm.sh -o llvm.sh
+# chmod +x llvm.sh
+# ./llvm.sh 13
 
 if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   USER_ID=${USER_ID:-1000}

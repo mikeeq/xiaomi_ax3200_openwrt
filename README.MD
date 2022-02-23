@@ -32,8 +32,6 @@ Password:
 - Error when building package qosify, [link](https://forum.openwrt.org/t/qosify-on-rt3200-possible/111277/3?u=mikeeq)
 
   ```bash
-  aarch64-openwrt-linux-musl-gcc: command not found
-
   make[1]: [package/Makefile:115: package/network/config/qosify/download] Error 2 (ignored)
   make[2]: Entering directory '/repo/openwrt/upstream/package/network/config/qosify'
   bash: /repo/openwrt/upstream/staging_dir/host/llvm-bpf/bin/clang: No such file or directory
@@ -43,6 +41,18 @@ Password:
   time: package/network/config/qosify/download#0.03#0.01#0.04
       ERROR: package/network/config/qosify failed to build.
   make[1]: *** [package/Makefile:116: package/network/config/qosify/download] Error 1
+  ```
+
+- to be verified: musl package install
+
+  ```bash
+  make[2]: Entering directory '/repo/openwrt/upstream/toolchain/musl'
+  bash: aarch64-openwrt-linux-musl-gcc: command not found
+  bash: aarch64-openwrt-linux-musl-gcc: command not found
+  bash: aarch64-openwrt-linux-musl-gcc: command not found
+  make[2]: Nothing to be done for 'download'.
+  make[2]: Leaving directory '/repo/openwrt/upstream/toolchain/musl'
+  time: toolchain/musl/download#0.01#0.01#0.02
   ```
 
 ## Tutorial: How to install OpenWRT

@@ -48,7 +48,7 @@ apt-get clean && \
 groupadd --gid $GROUP_ID buser && \
 useradd --uid $USER_ID --gid $GROUP_ID -m -s /bin/bash buser
 
-if [[ $IMAGE_BUILD_ONLY == false ]]; then
+if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   inf "Run ./build_image.sh"
   # IN_DOCKER=true ./build_image.sh
   su -c "IN_DOCKER=true ./build_image.sh" buser

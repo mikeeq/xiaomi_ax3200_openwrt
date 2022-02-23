@@ -10,7 +10,7 @@ inf "SCRIPT_PATH=$SCRIPT_PATH"
 
 OPENWRT_PATH=${OPENWRT_PATH:-/tmp/openwrt}
 
-if [[ $SKIP_PULL == true || ! -f /tmp/openwrt/patchfile ]]
+if [[ $SKIP_PULL == true || ! -f /tmp/openwrt/patchfile ]]; then
   inf "Pull official openwrt repo"
 
   OPENWRT_GIT_URL=https://github.com/openwrt/openwrt.git

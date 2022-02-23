@@ -6,10 +6,10 @@ SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 echo "===]> Info: RUN_PATH=$RUN_PATH"
 echo "===]> Info: SCRIPT_PATH=$SCRIPT_PATH"
 
-DOCKER_IMAGE=debian:buster
+# DOCKER_IMAGE=debian:buster
+DOCKER_IMAGE=openwrt
 RUN_SHELL=${RUN_SHELL:-false}
 SKIP_PULL=${SKIP_PULL:-true}
-IMAGE_BUILD_ONLY=${IMAGE_BUILD_ONLY:-false}
 
 # mkdir -p ${RPMBUILD_HOST_PATH}
 

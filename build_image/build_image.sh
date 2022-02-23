@@ -77,4 +77,4 @@ cd ${OPENWRT_GIT_PATH}
 # find bin/ | grep -i ".bin"
 ls -ltr bin/targets/mediatek/mt7622/ | grep -i -e ".img" -e ".bin"
 
-find . | grep -i xiaomi
+find . | grep -i ax6s

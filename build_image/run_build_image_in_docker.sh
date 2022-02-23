@@ -9,12 +9,12 @@ source helpers/functions.sh
 inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
 
-DOCKER_IMAGE=debian:buster
-# DOCKER_IMAGE=openwrt
+# DOCKER_IMAGE=debian:buster
+DOCKER_IMAGE=openwrt
 RUN_SHELL=${RUN_SHELL:-false}
 SKIP_PULL=${SKIP_PULL:-true}
 
-# mkdir -p ${RPMBUILD_HOST_PATH}
+# docker build -t openwrt .
 
 # docker pull ${DOCKER_IMAGE}
 if [[ $RUN_SHELL == true ]]; then
@@ -32,6 +32,7 @@ docker run \
   -e USER_ID="$(id -u)" \
   -e GROUP_ID="$(id -g)" \
   -e ARTIFACTS_PATH=/repo/artifacts \
+  -e OPENWRT_PATH=/repo/openwrt \
   -e SKIP_PULL=$SKIP_PULL \
   -v "$(pwd)":/repo \
   -w /repo \

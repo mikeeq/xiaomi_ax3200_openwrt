@@ -5,7 +5,8 @@ set -eu -o pipefail
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 
-cd $SCRIPT_PATH
+cd "$SCRIPT_PATH" || exit
+# shellcheck disable=SC1091
 source helpers/functions.sh
 
 inf "RUN_PATH=$RUN_PATH"
@@ -52,14 +53,14 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   inf "OPENWRT_PATH=$OPENWRT_PATH"
 
   inf "Creating buser - build user"
-  groupadd --gid $GROUP_ID buser
-  useradd --uid $USER_ID --gid $GROUP_ID -m -s /bin/bash buser
+  groupadd --gid "$GROUP_ID" buser
+  useradd --uid "$USER_ID" --gid "$GROUP_ID" -m -s /bin/bash buser
 
-  mkdir -p $ARTIFACTS_PATH
-  mkdir -p $OPENWRT_PATH
+  mkdir -p "$ARTIFACTS_PATH"
+  mkdir -p "$OPENWRT_PATH"
 
-  chown -R $USER_ID:$GROUP_ID $SCRIPT_PATH
-  chown -R $USER_ID:$GROUP_ID $OPENWRT_PATH
+  chown -R "$USER_ID":"$GROUP_ID" "$SCRIPT_PATH"
+  chown -R "$USER_ID":"$GROUP_ID" "$OPENWRT_PATH"
 
   inf "Run ./build_image.sh"
   # IN_DOCKER=true ./build_image.sh
@@ -67,12 +68,15 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   build_exitcode=$?
 
   inf "Copy artifacts to ARTIFACTS_PATH"
-  cd $OPENWRT_PATH
+  cd "$OPENWRT_PATH"
 
-  cp -rfv $(find . | grep bin/targets | grep -i ax6s) $ARTIFACTS_PATH/
-  cp -rfv $(find . | grep bin/targets | grep -i profiles.json) $ARTIFACTS_PATH/
-  cp -rfv $(find . | grep bin/targets | grep -i sha256sum) $ARTIFACTS_PATH/
-  cp -rfv $OPENWRT_PATH/patchfile $ARTIFACTS_PATH/
+  # shellcheck disable=SC2046
+  cp -rfv $(find . | grep bin/targets | grep -i ax6s) "$ARTIFACTS_PATH/"
+  # shellcheck disable=SC2046
+  cp -rfv $(find . | grep bin/targets | grep -i profiles.json) "$ARTIFACTS_PATH/"
+  # shellcheck disable=SC2046
+  cp -rfv $(find . | grep bin/targets | grep -i sha256sum) "$ARTIFACTS_PATH/"
+  cp -rfv "$OPENWRT_PATH"/patchfile "$ARTIFACTS_PATH/"
 
   exit $build_exitcode
 fi

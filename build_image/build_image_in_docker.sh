@@ -27,20 +27,20 @@ apt-get install -y sudo curl vim gnupg apt-utils
 # llvm requirements
 # apt-get install -y lsb-release wget software-properties-common
 
-if ! grep -q llvm-toolchain-buster-13 /etc/apt/sources.list; then
-  inf "Adding clang-13 apt-get repo"
-  echo "
-  deb http://apt.llvm.org/buster/ llvm-toolchain-buster main
-  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster main
-  # 13
-  deb http://apt.llvm.org/buster/ llvm-toolchain-buster-13 main
-  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-13 main
-  # 14
-  deb http://apt.llvm.org/buster/ llvm-toolchain-buster-14 main
-  deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-14 main" >> /etc/apt/sources.list
+# if ! grep -q llvm-toolchain-buster-13 /etc/apt/sources.list; then
+#   inf "Adding clang-13 apt-get repo"
+#   echo "
+#   deb http://apt.llvm.org/buster/ llvm-toolchain-buster main
+#   deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster main
+#   # 13
+#   deb http://apt.llvm.org/buster/ llvm-toolchain-buster-13 main
+#   deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-13 main
+#   # 14
+#   deb http://apt.llvm.org/buster/ llvm-toolchain-buster-14 main
+#   deb-src http://apt.llvm.org/buster/ llvm-toolchain-buster-14 main" >> /etc/apt/sources.list
 
-  curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-fi
+#   curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+# fi
 
 # export CMAKE_C_COMPILER=clang-13
 # export CMAKE_CXX_COMPILER=clang++-13
@@ -52,7 +52,7 @@ apt-get install -y time git-core subversion build-essential ccache ecj fastjar f
   flex gettext wget unzip xz-utils python python-distutils-extra python3 python3-distutils-extra rsync \
   python3-setuptools python3-dev swig xsltproc zlib1g-dev
 
-apt-get install -y clang-13 llvm-13
+# apt-get install -y clang-13 llvm-13
 
 # apt-get install -y libllvm-13-ocaml-dev libllvm13 llvm-13 llvm-13-dev llvm-13-doc llvm-13-examples llvm-13-runtime
 # apt-get install -y clang-13 clang-tools-13 clang-13-doc libclang-common-13-dev libclang-13-dev libclang1-13 clang-format-13 python3-clang-13 clangd-13 clang-tidy-13

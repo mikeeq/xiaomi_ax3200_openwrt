@@ -3,8 +3,11 @@
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 
-echo "===]> Info: RUN_PATH=$RUN_PATH"
-echo "===]> Info: SCRIPT_PATH=$SCRIPT_PATH"
+cd $SCRIPT_PATH
+source helpers/functions.sh
+
+inf "RUN_PATH=$RUN_PATH"
+inf "SCRIPT_PATH=$SCRIPT_PATH"
 
 # DOCKER_IMAGE=debian:buster
 DOCKER_IMAGE=openwrt

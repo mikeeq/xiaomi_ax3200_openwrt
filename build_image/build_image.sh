@@ -3,6 +3,7 @@
 RUN_PATH=$PWD
 SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 
+cd $SCRIPT_PATH
 source helpers/functions.sh
 
 inf "RUN_PATH=$RUN_PATH"

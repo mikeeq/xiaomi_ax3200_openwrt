@@ -82,7 +82,7 @@ Password:
    # cat /proc/mtd
    ```
 
-4. SCP (copy over SSH) `factory.bin` and `rootfs.ubi`
+4. SCP (copy over SSH) OpenWRT images
 
    ```bash
    # Create temporary directory

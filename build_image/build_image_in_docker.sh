@@ -48,13 +48,15 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   inf "ARTIFACTS_PATH=$ARTIFACTS_PATH"
   inf "OPENWRT_PATH=$OPENWRT_PATH"
 
-  groupadd --gid $GROUP_ID buser && \
+  groupadd --gid $GROUP_ID buser
   useradd --uid $USER_ID --gid $GROUP_ID -m -s /bin/bash buser
 
   mkdir -p $ARTIFACTS_PATH
   mkdir -p $OPENWRT_PATH
 
   chown -R $USER_ID:$GROUP_ID $SCRIPT_PATH
+  chown -R $USER_ID:$GROUP_ID $ARTIFACTS_PATH
+  chown -R $USER_ID:$GROUP_ID $OPENWRT_PATH
 
   inf "Run ./build_image.sh"
   # IN_DOCKER=true ./build_image.sh

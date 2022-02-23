@@ -129,6 +129,8 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
    - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
    - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
    - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
+   - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
+   - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
 
 ## Luci Overview
 
@@ -170,6 +172,7 @@ Main:
 - <https://github.com/openwrt/openwrt/pull/4810/commits/6dc598a880aa79eb2fe5b3e8a04bc23a96256cb2>
 - <https://github.com/acecilia/OpenWRTInvasion>
 - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
+- <https://github.com/robimarko/openwrt/blob/IPQ807x-5.10-backports/.github/workflows/ipq807x.yaml>
 
 Additional:
 

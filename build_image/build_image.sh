@@ -19,10 +19,10 @@ OPENWRT_GIT_BRANCH_NAME=master
 OPENWRT_GIT_COMMIT_HASH=b9251e3b407592f3114e739231088c3d27663c4c
 OPENWRT_GIT_PATH=${OPENWRT_PATH}/upstream
 
-OPENWRT_NAMIDAIRO_GIT_URL=https://github.com/namidairo/openwrt.git
-OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME=ax6s
-# OPENWRT_NAMIDAIRO_GIT_COMMIT_HASH=78a9bee50bc116f443a56d2c094f5c3d3be5c868
-OPENWRT_NAMIDAIRO_GIT_PATH=${OPENWRT_PATH}/namidairo
+# OPENWRT_NAMIDAIRO_GIT_URL=https://github.com/namidairo/openwrt.git
+# OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME=ax6s
+# # OPENWRT_NAMIDAIRO_GIT_COMMIT_HASH=78a9bee50bc116f443a56d2c094f5c3d3be5c868
+# OPENWRT_NAMIDAIRO_GIT_PATH=${OPENWRT_PATH}/namidairo
 
 if [[ ${SKIP_PULL:-false} == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
   inf "Pull official openwrt repo"
@@ -32,17 +32,18 @@ if [[ ${SKIP_PULL:-false} == false || ! -f ${OPENWRT_PATH}/patchfile ]]; then
   cd "${OPENWRT_GIT_PATH}"
   git checkout ${OPENWRT_GIT_COMMIT_HASH}
 
-  inf "Pull namidairo openwrt repo with xiaomi support"
+  # inf "Pull namidairo openwrt repo with xiaomi support"
 
-  git clone ${OPENWRT_NAMIDAIRO_GIT_URL} "${OPENWRT_NAMIDAIRO_GIT_PATH}"
+  # git clone ${OPENWRT_NAMIDAIRO_GIT_URL} "${OPENWRT_NAMIDAIRO_GIT_PATH}"
 
-  cd "${OPENWRT_NAMIDAIRO_GIT_PATH}"
-  git checkout ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME}
-  git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > "${OPENWRT_PATH}"/patchfile
+  # cd "${OPENWRT_NAMIDAIRO_GIT_PATH}"
+  # git checkout ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME}
+  # git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > "${OPENWRT_PATH}"/patchfile
 
   inf "Apply namidairo patches to upstream repo"
   cd "${OPENWRT_GIT_PATH}"
-  git apply "${OPENWRT_PATH}"/patchfile
+  # git apply "${OPENWRT_PATH}"/patchfile
+  git apply "${SCRIPT_PATH}"/files/ax3200.patch
 fi
 
 inf "Add build scripts"

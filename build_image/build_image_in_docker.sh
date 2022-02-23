@@ -61,6 +61,8 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   build_exitcode=$?
 
   inf "Copy artifacts to ARTIFACTS_PATH"
+  cd $OPENWRT_PATH
+
   cp -rfv $(find . | grep bin/targets | grep -i ax6s) $ARTIFACTS_PATH/
   cp -rfv $(find . | grep bin/targets | grep -i profiles.json) $ARTIFACTS_PATH/
   cp -rfv $(find . | grep bin/targets | grep -i sha256sum) $ARTIFACTS_PATH/

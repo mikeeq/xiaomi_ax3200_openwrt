@@ -2,9 +2,7 @@
 
 opt=$2
 
-BUILD_VERBOSE=false
-
-if [[ $BUILD_VERBOSE == true ]]; then
+if [[ ${BUILD_VERBOSE:-true} == true ]]; then
   DOWNLOAD_VERBOSE="V=sc"
   MAKE_VERBOSE="V=s"
 else

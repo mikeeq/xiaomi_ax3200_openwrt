@@ -11,7 +11,7 @@ inf "SCRIPT_PATH=$SCRIPT_PATH"
 
 OPENWRT_PATH=${OPENWRT_PATH:-/tmp/openwrt}
 
-if [[ $SKIP_PULL == true || ! -f /tmp/openwrt/patchfile ]]; then
+if [[ $SKIP_PULL == true || ! -f ${OPENWRT_PATH}/patchfile ]]; then
   inf "Pull official openwrt repo"
 
   OPENWRT_GIT_URL=https://github.com/openwrt/openwrt.git
@@ -54,7 +54,9 @@ cp -rfv $SCRIPT_PATH/files/config.buildinfo ./.config
 
 if [[ $IN_DOCKER == true ]]; then
   inf "Build OpenWRT image in Docker"
-  ./build.sh build-official
+
+  [[ $SKIP_DOWNLOAD == true ]] && $BUILD_OPTS="nodownload"
+  ./build.sh build-official ${BUILD_OPTS:-}
 else
   # https://gitlab.com/db260179/openwrt-base/-/tree/master/docker
   # https://gitlab.com/db260179/openwrt-base/-/archive/master/openwrt-base-master.zip?path=docker
@@ -72,9 +74,13 @@ else
   inf "Build OpenWRT image"
   ./run-build.sh build-official
 fi
+build_exitcode=$?
 
 cd ${OPENWRT_GIT_PATH}
-# find bin/ | grep -i ".bin"
-ls -ltr bin/targets/mediatek/mt7622/ | grep -i -e ".img" -e ".bin"
+inf "Listing built images"
+ls -ltr bin/targets/mediatek/mt7622/
 
+inf "Listing ax6s images"
 find . | grep -i ax6s
+
+exit $build_exitcode

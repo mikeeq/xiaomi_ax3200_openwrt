@@ -30,12 +30,10 @@ export CMAKE_C_COMPILER=clang-12
 export CMAKE_CXX_COMPILER=clang++-12
 
 apt-get update
-
 apt-get install -y time git-core subversion build-essential ccache ecj fastjar file screen quilt libncursesw5-dev libssl-dev \
   g++ java-propose-classpath libelf-dev bash make patch libncurses5 libncurses5-dev zlib1g-dev gawk \
   flex gettext wget unzip xz-utils python python-distutils-extra python3 python3-distutils-extra rsync \
   python3-setuptools python3-dev swig xsltproc zlib1g-dev llvm clang-12
-
 
 if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   USER_ID=${USER_ID:-1000}
@@ -55,17 +53,18 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   mkdir -p $OPENWRT_PATH
 
   chown -R $USER_ID:$GROUP_ID $SCRIPT_PATH
-  chown -R $USER_ID:$GROUP_ID $ARTIFACTS_PATH
   chown -R $USER_ID:$GROUP_ID $OPENWRT_PATH
 
   inf "Run ./build_image.sh"
   # IN_DOCKER=true ./build_image.sh
   su -c "OPENWRT_PATH=$OPENWRT_PATH IN_DOCKER=true ./build_image.sh" buser
+  build_exitcode=$?
 
   inf "Copy artifacts to ARTIFACTS_PATH"
-  cp -rfv bin/targets/mediatek/mt7622/*.bin $ARTIFACTS_PATH/
-  cp -rfv bin/targets/mediatek/mt7622/*.img $ARTIFACTS_PATH/
-  cp -rfv bin/targets/mediatek/mt7622/profiles.json $ARTIFACTS_PATH/
-  cp -rfv bin/targets/mediatek/mt7622/sha256sums $ARTIFACTS_PATH/
+  cp -rfv $(find . | grep bin/targets | grep -i ax6s) $ARTIFACTS_PATH/
+  cp -rfv $(find . | grep bin/targets | grep -i profiles.json) $ARTIFACTS_PATH/
+  cp -rfv $(find . | grep bin/targets | grep -i sha256sum) $ARTIFACTS_PATH/
   cp -rfv $OPENWRT_PATH/patchfile $ARTIFACTS_PATH/
+
+  exit $build_exitcode
 fi

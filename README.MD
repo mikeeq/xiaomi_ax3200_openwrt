@@ -27,8 +27,12 @@ Password:
 
 ### Known Issues
 
-- 160Hz wide 5GHz channels don't work [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
-- Smaller coverage area comparing to stock firmware
+- 160Hz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
+- Smaller coverage area/WiFi speeds comparing to stock firmware
+- I wasn't able to flash OpenWRT on recovered via TFTP AX3200 to 1.0.50 FW, I needed to flash my factory firmware 1.0.71, restore default settings (as they were saved from 1.0.50) and then I was able to flash OpenWRT
+
+### Build Errors
+
 - Error when building package qosify, [link](https://forum.openwrt.org/t/qosify-on-rt3200-possible/111277/3?u=mikeeq)
 
   ```bash
@@ -58,6 +62,12 @@ Password:
 ## Tutorial: How to install OpenWRT
 
 0. I recommend restoring router settings to factory defaults, before installing OpenWRT
+
+   - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Factory data reset` button `restore`
+
+     ![Factory Defaults](images/factory_defaults.png)
+
+<!-- <img src="images/factory_defaults.png" width="1000"> -->
 
 1. Finish initial setup by going to <http://192.168.31.1>
 
@@ -176,10 +186,9 @@ Password:
 6. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
 7. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
 
-### Useful links
+### Useful links with debricking information
 
-- You must set the ip address 192.168.31.100 on your pc, and you can use Xiaomi Recovery Tool.
-If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
+- <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>
 - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
 - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
 - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
@@ -225,25 +234,6 @@ mtd8: 07300000 00020000 "firmware"
 mtd9: 003c0000 00020000 "kernel"
 mtd10: 06f40000 00020000 "rootfs"
 mtd11: 06900000 00020000 "rootfs_data"
-
-root@OpenWrt:/tmp/xiaomi_openwrt_images# ls -l /
-drwxr-xr-x    2 root     root           778 Feb 16 02:32 bin
-drwxr-xr-x    3 root     root          1440 Feb 16 02:32 dev
-drwxr-xr-x    1 root     root             0 Feb 16 02:33 etc
--rwxr-xr-x    1 root     root           276 Feb 16 02:32 init
-drwxr-xr-x   11 root     root           553 Feb 16 02:32 lib
-lrwxrwxrwx    1 root     root             3 Feb 16 02:32 lib64 -> lib
-drwxr-xr-x    2 root     root             3 Feb 16 02:32 mnt
-drwxr-xr-x    5 root     root             0 Feb 16 02:33 overlay
-dr-xr-xr-x  140 root     root             0 Jan  1  1970 proc
-drwxr-xr-x   16 root     root           260 Feb 16 02:32 rom
-drwxr-xr-x    2 root     root             3 Feb 16 02:32 root
-drwxr-xr-x    2 root     root           864 Feb 16 02:32 sbin
-dr-xr-xr-x   12 root     root             0 Jan  1  1970 sys
-drwxrwxrwt   19 root     root           520 Feb 16 02:35 tmp
-drwxr-xr-x    7 root     root           114 Feb 16 02:32 usr
-lrwxrwxrwx    1 root     root             3 Feb 16 02:32 var -> tmp
-drwxr-xr-x    4 root     root            79 Feb 16 02:32 www
 ```
 
 ## Luci Overview

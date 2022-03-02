@@ -25,7 +25,7 @@ steps:
       - name: build-artifacts
         path: /tmp/artifacts
     commands:
-      - build_image/build_image_in_docker.sh
+      - build_image/build_image_in_docker.sh | tee /tmp/artifacts/build.log
 
   - name: publish-github
     image: plugins/github-release

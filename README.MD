@@ -127,7 +127,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220223-main-test/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220302/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -195,6 +195,25 @@ Password:
 - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
 - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
 
+### How to upgrade OpenWRT
+
+```bash
+# SSH to OpenWRT flashed router
+ssh 192.168.1.1
+
+mkdir -p /tmp/xiaomi_fw
+cd /tmp/xiaomi_fw
+
+# Download image
+curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220302/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+
+# Flash image
+mtd -r write sysupgrade.bin firmware
+```
+
+1. Sysupgrade from Luci or via `sysupgrade` CLI command was not tested yet - <https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions>
+2. Restoring default settings was also not tested yet: <https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#soft_factory_reset>
+
 ## Stock /proc/mtd
 
 ```bash
@@ -220,7 +239,7 @@ mtd14: 00500000 00020000 "obr"
 ## OpenWRT /pro/mtd
 
 ```bash
-root@OpenWrt:~# cat /proc/mtd
+root@OpenWrt:/# cat /proc/mtd
 dev:    size   erasesize  name
 mtd0: 00080000 00020000 "Preloader"
 mtd1: 00040000 00020000 "ATF"
@@ -231,9 +250,9 @@ mtd5: 00080000 00020000 "factory"
 mtd6: 00040000 00020000 "crash"
 mtd7: 00040000 00020000 "crash_log"
 mtd8: 07300000 00020000 "firmware"
-mtd9: 003c0000 00020000 "kernel"
-mtd10: 06f40000 00020000 "rootfs"
-mtd11: 06900000 00020000 "rootfs_data"
+mtd9: 003a0000 00020000 "kernel"
+mtd10: 06f60000 00020000 "rootfs"
+mtd11: 06a80000 00020000 "rootfs_data"
 ```
 
 ## Luci Overview
@@ -244,28 +263,25 @@ mtd11: 06900000 00020000 "rootfs_data"
 
 ```bash
 ❯ ssh root@192.168.1.1
-root@192.168.1.1's password:
-
-
-BusyBox v1.35.0 (2022-02-14 13:40:34 UTC) built-in shell (ash)
+BusyBox v1.35.0 (2022-03-01 22:57:40 UTC) built-in shell (ash)
 
   _______                     ________        __
- |     | .-----.-----.-----. |  |  |  | .----. |  | _ |
- | --- ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
  |_______||   __|_____|__|__||________||__|  |____|
           |__| W I R E L E S S   F R E E D O M
  -----------------------------------------------------
- OpenWrt SNAPSHOT, r18806-2120cad38d
+ OpenWrt SNAPSHOT, r19039-8235723c78
  -----------------------------------------------------
 root@OpenWrt:~# df -h
 Filesystem                Size      Used Available Use% Mounted on
-/dev/root                14.5M     14.5M         0 100% /rom
-tmpfs                   113.7M    944.0K    112.8M   1% /tmp
-/dev/ubi0_1              31.6M     56.0K     29.9M   0% /overlay
-overlayfs:/overlay       31.6M     56.0K     29.9M   0% /
+/dev/root                 5.0M      5.0M         0 100% /rom
+tmpfs                   113.9M    236.0K    113.7M   0% /tmp
+tmpfs                   113.9M     72.0K    113.9M   0% /tmp/root
 tmpfs                   512.0K         0    512.0K   0% /dev
-
-root@OpenWrt:/# dmesg | grep -i xia
+/dev/mtdblock11         106.5M      2.5M    104.0M   2% /overlay
+overlayfs:/overlay      106.5M      2.5M    104.0M   2% /
+root@OpenWrt:~# dmesg | grep -i xia
 [    0.000000] Machine model: Xiaomi Redmi Router AX6S
 ```
 

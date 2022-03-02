@@ -146,14 +146,7 @@ Password:
 
    > If something went wrong make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
 
-7. If you're sure that you've bricked your device there's a recovery TFTP mode to restore stock firmware:
-   - You must set the ip address 192.168.31.100 on your pc, and you can use Xiaomi Recovery Tool.
-If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
-   - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
-   - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
-   - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
-   - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
-   - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
+7. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
 
 ## Router debricking
 
@@ -180,7 +173,17 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
 3. Poweroff your device by pulling out power cord from the device
 4. Push the reset button and simultaneously put the power cord back on
 5. Keep pushing the reset button till Power LED will start fast blinking
-6. After successful tftp recovery blue LED will start blinking, then you can safely restart your router by repluging power cord.
+6. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
+
+### Useful links
+
+- You must set the ip address 192.168.31.100 on your pc, and you can use Xiaomi Recovery Tool.
+If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
+- <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
+- <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
+- Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
+- <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
+- <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
 
 ## Luci Overview
 

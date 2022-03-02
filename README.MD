@@ -117,7 +117,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220223-main-test/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220223-main-test/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/

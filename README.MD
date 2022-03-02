@@ -174,6 +174,7 @@ Password:
 4. Push the reset button and simultaneously put the power cord back on
 5. Keep pushing the reset button till Power LED will start fast blinking
 6. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
+7. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
 
 ### Useful links
 
@@ -184,6 +185,66 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
 - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
 - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
 - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
+
+## Stock /proc/mtd
+
+```bash
+root@XiaoQiang:/tmp/xiaomi_openwrt_images# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00020000 00020000 "PL_Header"
+mtd1: 00060000 00020000 "Preloader"
+mtd2: 00040000 00020000 "ATF"
+mtd3: 00080000 00020000 "uboot"
+mtd4: 00040000 00020000 "Nvram"
+mtd5: 00040000 00020000 "Bdata"
+mtd6: 00080000 00020000 "Factory"
+mtd7: 00040000 00020000 "crash"
+mtd8: 00040000 00020000 "crash_syslog"
+mtd9: 01e00000 00020000 "firmware"
+mtd10: 01e00000 00020000 "firmware1"
+mtd11: 002a0000 00020000 "kernel"
+mtd12: 01b60000 00020000 "rootfs"
+mtd13: 03200000 00020000 "overlay"
+mtd14: 00500000 00020000 "obr"
+```
+
+## OpenWRT /pro/mtd
+
+```bash
+root@OpenWrt:~# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00080000 00020000 "Preloader"
+mtd1: 00040000 00020000 "ATF"
+mtd2: 00080000 00020000 "u-boot"
+mtd3: 00040000 00020000 "u-boot-env"
+mtd4: 00040000 00020000 "bdata"
+mtd5: 00080000 00020000 "factory"
+mtd6: 00040000 00020000 "crash"
+mtd7: 00040000 00020000 "crash_log"
+mtd8: 07300000 00020000 "firmware"
+mtd9: 003c0000 00020000 "kernel"
+mtd10: 06f40000 00020000 "rootfs"
+mtd11: 06900000 00020000 "rootfs_data"
+
+root@OpenWrt:/tmp/xiaomi_openwrt_images# ls -l /
+drwxr-xr-x    2 root     root           778 Feb 16 02:32 bin
+drwxr-xr-x    3 root     root          1440 Feb 16 02:32 dev
+drwxr-xr-x    1 root     root             0 Feb 16 02:33 etc
+-rwxr-xr-x    1 root     root           276 Feb 16 02:32 init
+drwxr-xr-x   11 root     root           553 Feb 16 02:32 lib
+lrwxrwxrwx    1 root     root             3 Feb 16 02:32 lib64 -> lib
+drwxr-xr-x    2 root     root             3 Feb 16 02:32 mnt
+drwxr-xr-x    5 root     root             0 Feb 16 02:33 overlay
+dr-xr-xr-x  140 root     root             0 Jan  1  1970 proc
+drwxr-xr-x   16 root     root           260 Feb 16 02:32 rom
+drwxr-xr-x    2 root     root             3 Feb 16 02:32 root
+drwxr-xr-x    2 root     root           864 Feb 16 02:32 sbin
+dr-xr-xr-x   12 root     root             0 Jan  1  1970 sys
+drwxrwxrwt   19 root     root           520 Feb 16 02:35 tmp
+drwxr-xr-x    7 root     root           114 Feb 16 02:32 usr
+lrwxrwxrwx    1 root     root             3 Feb 16 02:32 var -> tmp
+drwxr-xr-x    4 root     root            79 Feb 16 02:32 www
+```
 
 ## Luci Overview
 

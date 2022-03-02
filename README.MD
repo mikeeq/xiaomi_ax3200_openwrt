@@ -69,8 +69,8 @@ Password:
    cd xiaomi_openwrt
 
    # Pull scripts for generating telnet password
-   curl -Ls https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/script.sh -o ./script.sh
-   curl -Ls https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/password.py -o ./password.py
+   curl -L https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/script.sh -o ./script.sh
+   curl -L https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/password.py -o ./password.py
 
    # Replace <STOK> with the session token grabbed from the login URL after initial setup
    ## http://192.168.31.1/cgi-bin/luci/;stok=1675d313f8c5d384e191b653c44c5e3a/web/home#router
@@ -81,6 +81,7 @@ Password:
    ```
 
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
+   >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - [info](https://github.com/YangWang92/AX6S-unlock)
 
 3. Start SSHd on router using telnet
 
@@ -90,6 +91,7 @@ Password:
 
    # Enable SSH
    nvram set ssh_en=1
+   # Add flags which allow you to recover from bad flashes without going back to the OEM firmware.
    nvram set uart_en=1
    nvram set boot_wait=on
    nvram commit
@@ -97,6 +99,7 @@ Password:
 
    # Set password for root user, `echo -e “<PASSWORD>/n<PASSWORD>” | passwd root` didn't work for me
    passwd root
+   # After changing root password it will be persistent change even after restart, so if you'll be trying to telnet after reboot use this password instead of generated one from above
 
    # Start SSHd (dropbear)
    /etc/init.d/dropbear enable
@@ -112,13 +115,11 @@ Password:
    ```bash
    # Create temporary directory
    mkdir -p xiaomi_openwrt_images
-   cd xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220223-master-test/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o sysupgrade.bin
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220223-main-test/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
 
    # Copy images over SSH to router
-   cd ../
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
    ```
 
@@ -153,6 +154,32 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
    - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
    - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
    - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
+
+## Router debricking
+
+1. Poweroff your device by pulling out power cord from the device
+2. Push the reset button and simultaneously put the power cord back on
+3. Keep pushing the reset button till Power LED will start fast blinking
+4. Create tftp server
+
+   ```
+   mkdir -p /tmp/tftp
+   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F02.img
+   # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin
+   # To grab URL for stock firmware check http://192.168.31.1/cgi-bin/luci/;stok=<stok>/api/xqsystem/check_rom_update
+
+   # Check your interface name, in my case it's enp9s0
+   ip a
+
+   systemctl stop NetworkManager
+
+   ip address flush dev enp9s0
+   ip address add 192.168.31.100/24 dev enp9s0
+
+   dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
+   ```
+
+5. After successful tftp recovery blue LED will start blinking, then you can safely restart your router by repluging power cord.
 
 ## Luci Overview
 
@@ -190,11 +217,14 @@ root@OpenWrt:/# dmesg | grep -i xia
 ## Docs
 
 Main:
+
 - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085>
 - <https://github.com/openwrt/openwrt/pull/4810/commits/6dc598a880aa79eb2fe5b3e8a04bc23a96256cb2>
 - <https://github.com/acecilia/OpenWRTInvasion>
 - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
 - <https://github.com/robimarko/openwrt/blob/IPQ807x-5.10-backports/.github/workflows/ipq807x.yaml>
+- <https://github.com/YangWang92/AX6S-unlock>
+- <https://github.com/geekman/xqrepack/>
 
 Additional:
 

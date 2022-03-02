@@ -157,12 +157,10 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
 
 ## Router debricking
 
-1. Poweroff your device by pulling out power cord from the device
-2. Push the reset button and simultaneously put the power cord back on
-3. Keep pushing the reset button till Power LED will start fast blinking
-4. Create tftp server
+1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi recovery tool)
+2. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
-   ```
+   ```bash
    mkdir -p /tmp/tftp
    curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F02.img
    # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin
@@ -179,7 +177,10 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
    dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
    ```
 
-5. After successful tftp recovery blue LED will start blinking, then you can safely restart your router by repluging power cord.
+3. Poweroff your device by pulling out power cord from the device
+4. Push the reset button and simultaneously put the power cord back on
+5. Keep pushing the reset button till Power LED will start fast blinking
+6. After successful tftp recovery blue LED will start blinking, then you can safely restart your router by repluging power cord.
 
 ## Luci Overview
 

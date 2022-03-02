@@ -31,34 +31,6 @@ Password:
 - Smaller coverage area/WiFi speeds comparing to stock firmware
 - I wasn't able to flash OpenWRT on recovered via TFTP AX3200 to 1.0.50 FW, I needed to flash my factory firmware 1.0.71, restore default settings (as they were saved from 1.0.50) and then I was able to flash OpenWRT
 
-### Build Errors
-
-- Error when building package qosify, [link](https://forum.openwrt.org/t/qosify-on-rt3200-possible/111277/3?u=mikeeq)
-
-  ```bash
-  make[1]: [package/Makefile:115: package/network/config/qosify/download] Error 2 (ignored)
-  make[2]: Entering directory '/repo/openwrt/upstream/package/network/config/qosify'
-  bash: /repo/openwrt/upstream/staging_dir/host/llvm-bpf/bin/clang: No such file or directory
-  bash: line 0: [: : integer expression expected
-  /repo/openwrt/upstream/include/bpf.mk:70: *** ERROR: LLVM/clang version too old. Minimum required: 12, found: .  Stop.
-  make[2]: Leaving directory '/repo/openwrt/upstream/package/network/config/qosify'
-  time: package/network/config/qosify/download#0.03#0.01#0.04
-      ERROR: package/network/config/qosify failed to build.
-  make[1]: *** [package/Makefile:116: package/network/config/qosify/download] Error 1
-  ```
-
-- to be verified: musl package install
-
-  ```bash
-  make[2]: Entering directory '/repo/openwrt/upstream/toolchain/musl'
-  bash: aarch64-openwrt-linux-musl-gcc: command not found
-  bash: aarch64-openwrt-linux-musl-gcc: command not found
-  bash: aarch64-openwrt-linux-musl-gcc: command not found
-  make[2]: Nothing to be done for 'download'.
-  make[2]: Leaving directory '/repo/openwrt/upstream/toolchain/musl'
-  time: toolchain/musl/download#0.01#0.01#0.02
-  ```
-
 ## Tutorial: How to install OpenWRT
 
 0. I recommend restoring router settings to factory defaults, before installing OpenWRT
@@ -160,7 +132,7 @@ Password:
 
 ## Router debricking
 
-1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi recovery tool)
+1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
 2. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
@@ -188,10 +160,10 @@ Password:
 
 ### Useful links with debricking information
 
+- Xiaomi Recovery Tool official link: <http://miwifi.com/miwifi_download.html>
 - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>
 - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
 - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
-- Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
 - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
 - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
 

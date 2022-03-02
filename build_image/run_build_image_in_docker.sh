@@ -46,6 +46,7 @@ docker run \
   -e GROUP_ID="$(id -g)" \
   -e ARTIFACTS_PATH="/repo/artifacts" \
   -e OPENWRT_PATH="/repo/openwrt" \
+  -e REPO_PATH="/repo" \
   -e SKIP_PULL="$SKIP_PULL" \
   -e BUILD_VERBOSE="$BUILD_VERBOSE" \
   -e SKIP_DOWNLOAD="$SKIP_DOWNLOAD" \

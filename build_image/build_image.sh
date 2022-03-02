@@ -53,7 +53,6 @@ cd "${OPENWRT_GIT_PATH}"
 # chmod +x build.sh
 
 cp -rfv "$SCRIPT_PATH"/files/build.sh ./
-cp -rfv "$SCRIPT_PATH"/files/config.buildinfo ./.config
 
 # set FORCE_UNSAFE_CONFIGURE=1
 

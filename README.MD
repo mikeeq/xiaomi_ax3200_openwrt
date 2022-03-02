@@ -33,17 +33,17 @@ Password:
 
 ## Tutorial: How to install OpenWRT
 
-0. I recommend restoring router settings to factory defaults, before installing OpenWRT
+1. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
    - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Factory data reset` button `restore`
 
      ![Factory Defaults](images/factory_defaults.png)
 
-<!-- <img src="images/factory_defaults.png" width="1000"> -->
+     <!-- <img src="images/factory_defaults.png" width="1000"> -->
 
-1. Finish initial setup by going to <http://192.168.31.1>
+2. Finish initial setup by going to <http://192.168.31.1>
 
-2. Check if telnet is enabled on your device
+3. Check if telnet is enabled on your device
 
    ```bash
    # Create temporary directory
@@ -65,7 +65,7 @@ Password:
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
    >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - [info](https://github.com/YangWang92/AX6S-unlock)
 
-3. Start SSHd on router using telnet
+4. Start SSHd on router using telnet
 
    ```bash
    # Create telnet terminal session, use TELNET_PASSWORD from script output from previous point
@@ -92,7 +92,7 @@ Password:
    # cat /proc/mtd
    ```
 
-4. SCP (copy over SSH) OpenWRT images
+5. SCP (copy over SSH) OpenWRT images
 
    ```bash
    # Create temporary directory
@@ -105,7 +105,7 @@ Password:
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
    ```
 
-5. Validate sha256 checksums and flash OpenWRT
+6. Validate sha256 checksums and flash OpenWRT
 
    ```bash
    # Open SSH terminal session
@@ -124,11 +124,11 @@ Password:
    mtd -r write sysupgrade.bin firmware
    ```
 
-6. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
+7. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
 
    > If something went wrong make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
 
-7. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
+8. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
 
 ## Router debricking
 
@@ -169,6 +169,8 @@ Password:
 
 ### How to upgrade OpenWRT
 
+> I've tried to flash new sysupgrade image with new partition layout on images provided by thorsten97 (with old partition layout) and I bricked my device, so look out!
+
 ```bash
 # SSH to OpenWRT flashed router
 ssh 192.168.1.1
@@ -179,11 +181,14 @@ cd /tmp/xiaomi_fw
 # Download image
 curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220302/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
+# Validate checksums against checksums found in github releases file sha256sums_artifacts_only
+sha256sum *.bin
+
 # Flash image
 mtd -r write sysupgrade.bin firmware
 ```
 
-1. Sysupgrade from Luci or via `sysupgrade` CLI command was not tested yet - <https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions>
+1. SYSUPGRADE from Luci or via `sysupgrade` CLI command was not tested yet - <https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions>
 2. Restoring default settings was also not tested yet: <https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#soft_factory_reset>
 
 ## Stock /proc/mtd
@@ -238,8 +243,8 @@ mtd11: 06a80000 00020000 "rootfs_data"
 BusyBox v1.35.0 (2022-03-01 22:57:40 UTC) built-in shell (ash)
 
   _______                     ________        __
- |       |.-----.-----.-----.|  |  |  |.----.|  |_
- |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |     | .-----.-----.-----. |  |  |  | .----. |  | _ |
+ | --- ||  _  |  -__|     ||  |  |  ||   _||   _|
  |_______||   __|_____|__|__||________||__|  |____|
           |__| W I R E L E S S   F R E E D O M
  -----------------------------------------------------

@@ -133,7 +133,8 @@ Password:
 ## Router debricking
 
 1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
-2. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
+2. Remember about disabling any firewall on your PC which can block TFTP traffic
+3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
    mkdir -p /tmp/tftp
@@ -152,11 +153,11 @@ Password:
    dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
    ```
 
-3. Poweroff your device by pulling out power cord from the device
-4. Push the reset button and simultaneously put the power cord back on
-5. Keep pushing the reset button till Power LED will start fast blinking
-6. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
-7. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
+4. Poweroff your device by pulling out power cord from the device
+5. Push the reset button and simultaneously put the power cord back on
+6. Keep pushing the reset button till Power LED will start fast blinking
+7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
+8. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
 
 ### Useful links with debricking information
 
@@ -213,7 +214,7 @@ mtd13: 03200000 00020000 "overlay"
 mtd14: 00500000 00020000 "obr"
 ```
 
-## OpenWRT /pro/mtd
+## OpenWRT /proc/mtd
 
 ```bash
 root@OpenWrt:/# cat /proc/mtd

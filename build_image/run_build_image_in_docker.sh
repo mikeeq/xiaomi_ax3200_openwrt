@@ -13,7 +13,7 @@ inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
 
 # DOCKER_IMAGE=debian:buster
-DOCKER_IMAGE=openwrt:clang-13
+DOCKER_IMAGE=openwrt
 RUN_SHELL=${RUN_SHELL:-false}
 SKIP_PULL=${SKIP_PULL:-true}
 BUILD_VERBOSE=${BUILD_VERBOSE:-true}
@@ -25,7 +25,7 @@ inf "SKIP_PULL=$SKIP_PULL"
 inf "BUILD_VERBOSE=$BUILD_VERBOSE"
 inf "SKIP_DOWNLOAD=$SKIP_DOWNLOAD"
 
-# docker build -t openwrt .
+docker build -t openwrt .
 
 # docker pull ${DOCKER_IMAGE}
 if [[ $RUN_SHELL == true ]]; then
@@ -46,7 +46,6 @@ docker run \
   -e GROUP_ID="$(id -g)" \
   -e ARTIFACTS_PATH="/repo/artifacts" \
   -e OPENWRT_PATH="/repo/openwrt" \
-  -e REPO_PATH="/repo" \
   -e SKIP_PULL="$SKIP_PULL" \
   -e BUILD_VERBOSE="$BUILD_VERBOSE" \
   -e SKIP_DOWNLOAD="$SKIP_DOWNLOAD" \

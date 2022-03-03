@@ -60,7 +60,7 @@ if [[ $IN_DOCKER == true ]]; then
   inf "Build OpenWRT image in Docker"
 
   [[ ${SKIP_DOWNLOAD:-false} == true ]] && BUILD_OPTS="nodownload"
-  ./build.sh build-official ${BUILD_OPTS:-}
+  CONFIG_PATH=${SCRIPT_PATH}/files ./build.sh build-official ${BUILD_OPTS:-}
 else
   # https://gitlab.com/db260179/openwrt-base/-/tree/master/docker
   # https://gitlab.com/db260179/openwrt-base/-/archive/master/openwrt-base-master.zip?path=docker

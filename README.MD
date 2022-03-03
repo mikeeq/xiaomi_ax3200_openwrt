@@ -1,8 +1,10 @@
 # Xiaomi Router AX6S / AX3200 OpenWRT
 
+[![Drone Build Status](https://cloud.drone.io/api/badges/mikeeq/xiaomi_ax3200_openwrt/status.svg)](https://cloud.drone.io/mikeeq/xiaomi_ax3200_openwrt)
+
 ## Overview
 
-I'm planning to add pipeline for building OpenWRT images, as for now you'll only find here a tutorial for installing already built images.
+Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and tutorial how to install it.
 
 ## Tested HW
 
@@ -25,41 +27,23 @@ Password:
 
 ### Known Issues
 
-- 160Hz wide 5GHz channels don't work [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
-- Smaller coverage area comparing to stock firmware
-- Error when building package qosify, [link](https://forum.openwrt.org/t/qosify-on-rt3200-possible/111277/3?u=mikeeq)
-
-  ```bash
-  make[1]: [package/Makefile:115: package/network/config/qosify/download] Error 2 (ignored)
-  make[2]: Entering directory '/repo/openwrt/upstream/package/network/config/qosify'
-  bash: /repo/openwrt/upstream/staging_dir/host/llvm-bpf/bin/clang: No such file or directory
-  bash: line 0: [: : integer expression expected
-  /repo/openwrt/upstream/include/bpf.mk:70: *** ERROR: LLVM/clang version too old. Minimum required: 12, found: .  Stop.
-  make[2]: Leaving directory '/repo/openwrt/upstream/package/network/config/qosify'
-  time: package/network/config/qosify/download#0.03#0.01#0.04
-      ERROR: package/network/config/qosify failed to build.
-  make[1]: *** [package/Makefile:116: package/network/config/qosify/download] Error 1
-  ```
-
-- to be verified: musl package install
-
-  ```bash
-  make[2]: Entering directory '/repo/openwrt/upstream/toolchain/musl'
-  bash: aarch64-openwrt-linux-musl-gcc: command not found
-  bash: aarch64-openwrt-linux-musl-gcc: command not found
-  bash: aarch64-openwrt-linux-musl-gcc: command not found
-  make[2]: Nothing to be done for 'download'.
-  make[2]: Leaving directory '/repo/openwrt/upstream/toolchain/musl'
-  time: toolchain/musl/download#0.01#0.01#0.02
-  ```
+- 160Hz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
+- Smaller coverage area/WiFi speeds comparing to stock firmware
+- I wasn't able to flash OpenWRT on recovered via TFTP AX3200 to 1.0.50 FW, I needed to flash my factory firmware 1.0.71, restore default settings (as they were saved from 1.0.50) and then I was able to flash OpenWRT
 
 ## Tutorial: How to install OpenWRT
 
-0. I recommend restoring router settings to factory defaults, before installing OpenWRT
+1. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
-1. Finish initial setup by going to <http://192.168.31.1>
+   - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Factory data reset` button `restore`
 
-2. Check if telnet is enabled on your device
+     ![Factory Defaults](images/factory_defaults.png)
+
+     <!-- <img src="images/factory_defaults.png" width="1000"> -->
+
+2. Finish initial setup by going to <http://192.168.31.1>
+
+3. Check if telnet is enabled on your device
 
    ```bash
    # Create temporary directory
@@ -81,7 +65,7 @@ Password:
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
    >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - [info](https://github.com/YangWang92/AX6S-unlock)
 
-3. Start SSHd on router using telnet
+4. Start SSHd on router using telnet
 
    ```bash
    # Create telnet terminal session, use TELNET_PASSWORD from script output from previous point
@@ -108,28 +92,27 @@ Password:
    # cat /proc/mtd
    ```
 
-4. SCP (copy over SSH) OpenWRT images
+5. SCP (copy over SSH) OpenWRT images
 
    ```bash
    # Create temporary directory
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220222-thorsten97/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o factory.bin
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220222-thorsten97/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-rootfs.ubi -o rootfs.ubi
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220303/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
    ```
 
-5. Validate sha256 checksums and flash OpenWRT
+6. Validate sha256 checksums and flash OpenWRT
 
    ```bash
    # Open SSH terminal session
    ssh root@192.168.31.1
    cd /tmp/xiaomi_openwrt_images
 
-   # Validate those checksums against checksums found in github releases file sha256
+   # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
 
    # Set NVRAM flags
@@ -137,29 +120,21 @@ Password:
    nvram set flag_try_sys1_failed=0
    nvram set flag_try_sys2_failed=0
 
-   # Flash images
-   mtd write factory.bin firmware
-   mtd write factory.bin firmware1
-   mtd write -r rootfs.ubi overlay
+   # Flash image
+   mtd -r write sysupgrade.bin firmware
    ```
 
-6. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
+7. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
 
    > If something went wrong make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
 
-7. If you're sure that you've bricked your device there's a recovery TFTP mode to restore stock firmware:
-   - You must set the ip address 192.168.31.100 on your pc, and you can use Xiaomi Recovery Tool.
-If you use other tftp software, you need rename the firmware by C0A81F02.img and setup dhcp server with 192.168.31.0/24. ([SOURCE](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>))
-   - <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
-   - <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
-   - Xiaomi Recovery Tool: <http://miwifi.com/miwifi_download.html>
-   - <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
-   - <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
+8. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
 
 ## Router debricking
 
-1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi recovery tool)
-2. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
+1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
+2. Remember about disabling any firewall on your PC which can block TFTP traffic
+3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
    mkdir -p /tmp/tftp
@@ -178,10 +153,85 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
    dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
    ```
 
-3. Poweroff your device by pulling out power cord from the device
-4. Push the reset button and simultaneously put the power cord back on
-5. Keep pushing the reset button till Power LED will start fast blinking
-6. After successful tftp recovery blue LED will start blinking, then you can safely restart your router by repluging power cord.
+4. Poweroff your device by pulling out power cord from the device
+5. Push the reset button and simultaneously put the power cord back on
+6. Keep pushing the reset button till Power LED will start fast blinking
+7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
+8. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
+
+### Useful links with debricking information
+
+- Xiaomi Recovery Tool official link: <http://miwifi.com/miwifi_download.html>
+- <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/164?u=mikeeq>
+- <https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100#stock_recovery>
+- <https://gitlab.com/db260179/openwrt-base/-/tree/master/docker>
+- <https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq>
+- <https://openwrt.org/inbox/toh/xiaomi/xiaomi_ax3600#tftp_recovery>
+
+### How to upgrade OpenWRT
+
+> I've tried to flash new sysupgrade image with new partition layout on images provided by thorsten97 (with old partition layout) and I bricked my device, so look out!
+
+```bash
+# SSH to OpenWRT flashed router
+ssh 192.168.1.1
+
+mkdir -p /tmp/xiaomi_fw
+cd /tmp/xiaomi_fw
+
+# Download image
+curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220303/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+
+# Validate checksums against checksums found in github releases file sha256sums_artifacts_only
+sha256sum *.bin
+
+# Flash image
+mtd -r write sysupgrade.bin firmware
+```
+
+1. SYSUPGRADE from Luci or via `sysupgrade` CLI command was not tested yet - <https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions>
+2. Restoring default settings was also not tested yet: <https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#soft_factory_reset>
+
+## Stock /proc/mtd
+
+```bash
+root@XiaoQiang:/tmp/xiaomi_openwrt_images# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00020000 00020000 "PL_Header"
+mtd1: 00060000 00020000 "Preloader"
+mtd2: 00040000 00020000 "ATF"
+mtd3: 00080000 00020000 "uboot"
+mtd4: 00040000 00020000 "Nvram"
+mtd5: 00040000 00020000 "Bdata"
+mtd6: 00080000 00020000 "Factory"
+mtd7: 00040000 00020000 "crash"
+mtd8: 00040000 00020000 "crash_syslog"
+mtd9: 01e00000 00020000 "firmware"
+mtd10: 01e00000 00020000 "firmware1"
+mtd11: 002a0000 00020000 "kernel"
+mtd12: 01b60000 00020000 "rootfs"
+mtd13: 03200000 00020000 "overlay"
+mtd14: 00500000 00020000 "obr"
+```
+
+## OpenWRT /proc/mtd
+
+```bash
+root@OpenWrt:/# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00080000 00020000 "Preloader"
+mtd1: 00040000 00020000 "ATF"
+mtd2: 00080000 00020000 "u-boot"
+mtd3: 00040000 00020000 "u-boot-env"
+mtd4: 00040000 00020000 "bdata"
+mtd5: 00080000 00020000 "factory"
+mtd6: 00040000 00020000 "crash"
+mtd7: 00040000 00020000 "crash_log"
+mtd8: 07300000 00020000 "firmware"
+mtd9: 003a0000 00020000 "kernel"
+mtd10: 06f60000 00020000 "rootfs"
+mtd11: 06a80000 00020000 "rootfs_data"
+```
 
 ## Luci Overview
 
@@ -191,10 +241,7 @@ If you use other tftp software, you need rename the firmware by C0A81F02.img and
 
 ```bash
 ❯ ssh root@192.168.1.1
-root@192.168.1.1's password:
-
-
-BusyBox v1.35.0 (2022-02-14 13:40:34 UTC) built-in shell (ash)
+BusyBox v1.35.0 (2022-03-01 22:57:40 UTC) built-in shell (ash)
 
   _______                     ________        __
  |     | .-----.-----.-----. |  |  |  | .----. |  | _ |
@@ -202,17 +249,17 @@ BusyBox v1.35.0 (2022-02-14 13:40:34 UTC) built-in shell (ash)
  |_______||   __|_____|__|__||________||__|  |____|
           |__| W I R E L E S S   F R E E D O M
  -----------------------------------------------------
- OpenWrt SNAPSHOT, r18806-2120cad38d
+ OpenWrt SNAPSHOT, r19039-8235723c78
  -----------------------------------------------------
 root@OpenWrt:~# df -h
 Filesystem                Size      Used Available Use% Mounted on
-/dev/root                14.5M     14.5M         0 100% /rom
-tmpfs                   113.7M    944.0K    112.8M   1% /tmp
-/dev/ubi0_1              31.6M     56.0K     29.9M   0% /overlay
-overlayfs:/overlay       31.6M     56.0K     29.9M   0% /
+/dev/root                 5.0M      5.0M         0 100% /rom
+tmpfs                   113.9M    236.0K    113.7M   0% /tmp
+tmpfs                   113.9M     72.0K    113.9M   0% /tmp/root
 tmpfs                   512.0K         0    512.0K   0% /dev
-
-root@OpenWrt:/# dmesg | grep -i xia
+/dev/mtdblock11         106.5M      2.5M    104.0M   2% /overlay
+overlayfs:/overlay      106.5M      2.5M    104.0M   2% /
+root@OpenWrt:~# dmesg | grep -i xia
 [    0.000000] Machine model: Xiaomi Redmi Router AX6S
 ```
 

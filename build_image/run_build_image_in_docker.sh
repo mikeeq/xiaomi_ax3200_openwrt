@@ -13,7 +13,7 @@ inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
 
 # DOCKER_IMAGE=debian:buster
-DOCKER_IMAGE=openwrt
+DOCKER_IMAGE=openwrt_build
 RUN_SHELL=${RUN_SHELL:-false}
 SKIP_PULL=${SKIP_PULL:-true}
 BUILD_VERBOSE=${BUILD_VERBOSE:-true}
@@ -25,7 +25,7 @@ inf "SKIP_PULL=$SKIP_PULL"
 inf "BUILD_VERBOSE=$BUILD_VERBOSE"
 inf "SKIP_DOWNLOAD=$SKIP_DOWNLOAD"
 
-# docker build -t openwrt .
+docker build -t openwrt_build .
 
 # docker pull ${DOCKER_IMAGE}
 if [[ $RUN_SHELL == true ]]; then

@@ -102,7 +102,7 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   # shellcheck disable=SC2046
   cp -rfv $(find . | grep bin/targets | grep -i sha256sum) "$ARTIFACTS_PATH/"
   cp -rfv "$OPENWRT_PATH"/upstream/.config "$ARTIFACTS_PATH/config.build"
-  cp -rfv "$SCRIPT_PATH"/files/ax3200_78a9bee.patch "$ARTIFACTS_PATH/"
+  cp -rfv "$SCRIPT_PATH"/files/ax3200_78a9bee_fix.patch "$ARTIFACTS_PATH/"
   cp -rfv "$SCRIPT_PATH"/files/config.buildinfo "$ARTIFACTS_PATH/config.buildinfo"
 
   sha256sum "$ARTIFACTS_PATH"/* > "$ARTIFACTS_PATH/sha256sums_artifacts_only"

@@ -11,7 +11,7 @@ index 65ced284c3..3d327ff2a1 100644
 +	ubootenv_add_uci_sys_config "/dev/mtd4" "0x0" "0x10000" "0x40000"
 +	;;
  esac
-
+ 
  config_load ubootenv
 diff --git a/target/linux/mediatek/dts/mt7622-xiaomi-redmi-router-ax6s.dts b/target/linux/mediatek/dts/mt7622-xiaomi-redmi-router-ax6s.dts
 new file mode 100644
@@ -354,7 +354,7 @@ index 0000000000..ba344132b9
 +	mediatek,mtd-eeprom = <&factory 0x0>;
 +};
 diff --git a/target/linux/mediatek/files-5.10/drivers/mtd/mtk-snand/mtk-snand-ids.c b/target/linux/mediatek/files-5.10/drivers/mtd/mtk-snand/mtk-snand-ids.c
-index 1756ff7e30..48c014a474 100644
+index 1756ff7e30..89c72c10a5 100644
 --- a/target/linux/mediatek/files-5.10/drivers/mtd/mtk-snand/mtk-snand-ids.c
 +++ b/target/linux/mediatek/files-5.10/drivers/mtd/mtk-snand/mtk-snand-ids.c
 @@ -131,6 +131,10 @@ static const struct snand_flash_info snand_flash_ids[] = {
@@ -399,7 +399,7 @@ index 65a81df8da..5c32918d35 100644
 +	ucidef_set_led_netdev "wan" "WAN" "blue:net" "wan"
 +	;;
  esac
-
+ 
  board_config_flush
 diff --git a/target/linux/mediatek/mt7622/base-files/etc/board.d/02_network b/target/linux/mediatek/mt7622/base-files/etc/board.d/02_network
 index 7b454314cf..ba3d91355e 100644
@@ -418,7 +418,7 @@ index 7b454314cf..ba3d91355e 100644
 @@ -30,9 +33,28 @@ mediatek_setup_interfaces()
  	esac
  }
-
+ 
 +mediatek_setup_macs()
 +{
 +	local board="$1"
@@ -442,5 +442,5 @@ index 7b454314cf..ba3d91355e 100644
  mediatek_setup_interfaces $board
 +mediatek_setup_macs $board
  board_config_flush
-
+ 
  exit 0

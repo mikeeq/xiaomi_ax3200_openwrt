@@ -9,8 +9,11 @@ cd "$SCRIPT_PATH" || exit
 # shellcheck disable=SC1091
 source helpers/functions.sh
 
+PATCH_PATH="$SCRIPT_PATH/files/ax3200_78a9bee_fix.patch"
+
 inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
+inf "PATCH_PATH=$PATCH_PATH"
 
 [ -x "$(command -v apt-get)" ] || err "Run on Debian!"
 
@@ -89,7 +92,7 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
 
   inf "Run ./build_image.sh"
   # IN_DOCKER=true ./build_image.sh
-  su -c "OPENWRT_PATH=$OPENWRT_PATH IN_DOCKER=true ./build_image.sh" buser
+  su -c "PATCH_PATH=$PATCH_PATH OPENWRT_PATH=$OPENWRT_PATH IN_DOCKER=true ./build_image.sh" buser
   build_exitcode=$?
 
   inf "Copy artifacts to ARTIFACTS_PATH"
@@ -102,7 +105,7 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   # shellcheck disable=SC2046
   cp -rfv $(find . | grep bin/targets | grep -i sha256sum) "$ARTIFACTS_PATH/"
   cp -rfv "$OPENWRT_PATH"/upstream/.config "$ARTIFACTS_PATH/config.build"
-  cp -rfv "$SCRIPT_PATH"/files/ax3200_78a9bee_fix.patch "$ARTIFACTS_PATH/"
+  cp -rfv "$PATCH_PATH" "$ARTIFACTS_PATH/"
   cp -rfv "$SCRIPT_PATH"/files/config.buildinfo "$ARTIFACTS_PATH/config.buildinfo"
 
   sha256sum "$ARTIFACTS_PATH"/* > "$ARTIFACTS_PATH/sha256sums_artifacts_only"

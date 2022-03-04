@@ -38,6 +38,7 @@ if [[ ${SKIP_PULL:-false} == false || ! -d ${OPENWRT_GIT_PATH} ]]; then
 
   # cd "${OPENWRT_NAMIDAIRO_GIT_PATH}"
   # git checkout ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME}
+  # git pull origin master
   # git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > "${OPENWRT_PATH}"/patchfile
 
   inf "Apply namidairo patches to upstream repo"

@@ -9,7 +9,7 @@ cd "$SCRIPT_PATH" || exit
 # shellcheck disable=SC1091
 source helpers/functions.sh
 
-PATCH_PATH="$SCRIPT_PATH/files/ax3200_b768bf7.patch"
+PATCH_PATH="$SCRIPT_PATH/files/ax3200_2364147.patch"
 
 inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"

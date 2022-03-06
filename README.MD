@@ -138,14 +138,14 @@ Password:
 
 ## Router debricking
 
-1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
+1. Change your NIC IP address to 192.168.31.100 or 192.168.31.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
 2. Remember about disabling any firewall on your PC which can block TFTP traffic
 3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
    mkdir -p /tmp/tftp
-   # Stock image should be renamed to TFTP server IP address in hex (Eg. C0A81F64.img)
-   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F02.img
+   # Stock image should be renamed to TFTP server IP address in hex (Eg. C0A81F64.img), 192.168.31.2 - C0A81F02.img, 192.168.31.50 - C0A81F32.img, 192.168.31.100 - C0A81F64.img
+   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F64.img
    # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin
    # To grab URL for stock firmware check http://192.168.31.1/cgi-bin/luci/;stok=<stok>/api/xqsystem/check_rom_update
 
@@ -281,6 +281,7 @@ Main:
 - <https://github.com/robimarko/openwrt/blob/IPQ807x-5.10-backports/.github/workflows/ipq807x.yaml>
 - <https://github.com/YangWang92/AX6S-unlock>
 - <https://github.com/geekman/xqrepack/>
+- <https://forum.openwrt.org/t/xiaomi-ax3600-install-guide/68273>
 
 Additional:
 

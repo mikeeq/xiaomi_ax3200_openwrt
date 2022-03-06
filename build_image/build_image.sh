@@ -3,14 +3,19 @@ set -eu -o pipefail
 # set -x
 
 RUN_PATH=$PWD
-SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
+SCRIPT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SCRIPT_NAME=$(basename "$0")
+REPO_PATH=$(cd "${SCRIPT_PATH}/.." && pwd)
 
 cd "$SCRIPT_PATH" || exit
 # shellcheck disable=SC1091
 source helpers/functions.sh
 
+inf
+inf "SCRIPT_NAME=$SCRIPT_NAME"
 inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
+inf "REPO_PATH=$REPO_PATH"
 
 OPENWRT_PATH=${OPENWRT_PATH:-/tmp/openwrt}
 

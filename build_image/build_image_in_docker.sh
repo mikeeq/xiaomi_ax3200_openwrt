@@ -3,7 +3,9 @@ set -eu -o pipefail
 # set -x
 
 RUN_PATH=$PWD
-SCRIPT_PATH=${SCRIPT_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
+SCRIPT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SCRIPT_NAME=$(basename "$0")
+REPO_PATH=$(cd "${SCRIPT_PATH}/.." && pwd)
 
 cd "$SCRIPT_PATH" || exit
 # shellcheck disable=SC1091
@@ -11,9 +13,11 @@ source helpers/functions.sh
 
 PATCH_PATH="$SCRIPT_PATH/files/ax3200_2364147.patch"
 
+inf
+inf "SCRIPT_NAME=$SCRIPT_NAME"
 inf "RUN_PATH=$RUN_PATH"
 inf "SCRIPT_PATH=$SCRIPT_PATH"
-inf "PATCH_PATH=$PATCH_PATH"
+inf "REPO_PATH=$REPO_PATH"
 
 [ -x "$(command -v apt-get)" ] || err "Run on Debian!"
 
@@ -97,7 +101,8 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
     OPENWRT_BUILD_VERSION=$(git log --pretty=format:'%h' -n 1)
   fi
   inf "OPENWRT_BUILD_VERSION=$OPENWRT_BUILD_VERSION"
-  sed -i "s/CONFIG_KERNEL_BUILD_DOMAIN=\"droneci\"/CONFIG_KERNEL_BUILD_DOMAIN=\"${OPENWRT_BUILD_VERSION}-droneci\"/" files/config.buildinfo
+  cp -rfv "$SCRIPT_PATH/files/config.build" "$SCRIPT_PATH/files/config.buildinfo"
+  sed -i "s/CONFIG_KERNEL_BUILD_DOMAIN=\"droneci\"/CONFIG_KERNEL_BUILD_DOMAIN=\"${OPENWRT_BUILD_VERSION}-droneci\"/" "$SCRIPT_PATH/files/config.buildinfo"
 
   inf "Run ./build_image.sh"
   # IN_DOCKER=true ./build_image.sh

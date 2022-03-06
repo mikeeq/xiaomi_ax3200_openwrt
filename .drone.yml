@@ -25,8 +25,7 @@ steps:
       - name: build-artifacts
         path: /tmp/artifacts
     commands:
-      - set -eu -o pipefail
-      - build_image/build_image_in_docker.sh | tee /tmp/artifacts/build.log
+      - /bin/bash -c "set -o pipefail; build_image/build_image_in_docker.sh | tee /tmp/artifacts/build.log"
 
   - name: publish-github
     image: plugins/github-release

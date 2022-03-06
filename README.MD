@@ -30,7 +30,6 @@ Password:
 - 160Hz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
 - Smaller coverage area/WiFi speeds comparing to stock firmware
 - I wasn't able to flash OpenWRT on recovered via TFTP AX3200 to 1.0.50 FW, I needed to flash my factory firmware 1.0.71, restore default settings (as they were saved from 1.0.50) and then I was able to flash OpenWRT
-- Saved settings are not getting restored after reboot, to fix [check here](#)
 
 ## Tutorial: How to install OpenWRT
 
@@ -65,6 +64,8 @@ Password:
 
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
    >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - [info](https://github.com/YangWang92/AX6S-unlock)
+
+   - RB03 1.2.7 dev FW (with telnet enabled) has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
 
 4. Start SSHd on router using telnet
 
@@ -120,8 +121,10 @@ Password:
    nvram set flag_boot_success=1
    nvram set flag_try_sys1_failed=0
    nvram set flag_try_sys2_failed=0
+   nvram commit
 
    # Flash image
+   # mtd -r write factory.bin firmware
    mtd -r write sysupgrade.bin firmware
    ```
 
@@ -131,8 +134,6 @@ Password:
 
 8. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
 
-### Saved settings fix
-
 ## Router debricking
 
 1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
@@ -141,6 +142,7 @@ Password:
 
    ```bash
    mkdir -p /tmp/tftp
+   # Stock image should be renamed to TFTP server IP address in hex (Eg. C0A81F64.img)
    curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F02.img
    # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin
    # To grab URL for stock firmware check http://192.168.31.1/cgi-bin/luci/;stok=<stok>/api/xqsystem/check_rom_update

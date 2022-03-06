@@ -31,14 +31,12 @@ OPENWRT_GIT_PATH=${OPENWRT_PATH}/upstream
 
 if [[ ${SKIP_PULL:-false} == false || ! -d ${OPENWRT_GIT_PATH} ]]; then
   inf "Pull official openwrt repo"
-
   git clone --single-branch --branch ${OPENWRT_GIT_BRANCH_NAME} ${OPENWRT_GIT_URL} "${OPENWRT_GIT_PATH}"
 
   cd "${OPENWRT_GIT_PATH}"
   git checkout ${OPENWRT_GIT_COMMIT_HASH}
 
   # inf "Pull namidairo openwrt repo with xiaomi support"
-
   # git clone ${OPENWRT_NAMIDAIRO_GIT_URL} "${OPENWRT_NAMIDAIRO_GIT_PATH}"
 
   # cd "${OPENWRT_NAMIDAIRO_GIT_PATH}"
@@ -46,10 +44,11 @@ if [[ ${SKIP_PULL:-false} == false || ! -d ${OPENWRT_GIT_PATH} ]]; then
   # git pull origin master
   # git diff master ${OPENWRT_NAMIDAIRO_GIT_BRANCH_NAME} > "${OPENWRT_PATH}"/patchfile
 
-  inf "Apply namidairo patches to upstream repo"
-  cd "${OPENWRT_GIT_PATH}"
-  # git apply "${OPENWRT_PATH}"/patchfile
-  git apply "${PATCH_PATH}"
+  # inf "Apply namidairo patches to upstream repo"
+  # cd "${OPENWRT_GIT_PATH}"
+  # git apply "${PATCH_PATH}"
+
+  git apply "${OPENWRT_PATH}"/patchfile
 fi
 
 inf "Add build scripts"

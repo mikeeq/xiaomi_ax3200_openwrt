@@ -30,7 +30,7 @@ inf "SKIP_PULL=$SKIP_PULL"
 inf "BUILD_VERBOSE=$BUILD_VERBOSE"
 inf "SKIP_DOWNLOAD=$SKIP_DOWNLOAD"
 
-# docker build -t openwrt_build .
+docker build -t openwrt_build .
 
 # docker pull ${DOCKER_IMAGE}
 if [[ $RUN_SHELL == true ]]; then

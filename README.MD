@@ -101,7 +101,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220303/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -117,7 +117,8 @@ Password:
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
 
-   # Set NVRAM flags, run commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
+   # Set NVRAM flags
+   # Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
    # nvram set flag_boot_rootfs=0
    # nvram set "boot_fw1=run boot_rd_img;bootm"
    nvram set flag_boot_success=1
@@ -126,8 +127,7 @@ Password:
    nvram commit
 
    # Flash image
-   # mtd -r write factory.bin firmware
-   mtd -r write sysupgrade.bin firmware
+   mtd -r write factory.bin firmware
    ```
 
 7. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
@@ -187,7 +187,7 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220303/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin

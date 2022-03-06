@@ -392,7 +392,7 @@ diff --git a/target/linux/mediatek/image/mt7622.mk b/target/linux/mediatek/image
 index daec843b49..6af0462cc5 100644
 --- a/target/linux/mediatek/image/mt7622.mk
 +++ b/target/linux/mediatek/image/mt7622.mk
-@@ -249,3 +249,22 @@ define Device/ubnt_unifi-6-lr-ubootmod
+@@ -249,3 +249,23 @@ define Device/ubnt_unifi-6-lr-ubootmod
    ARTIFACT/bl31-uboot.fip := bl31-uboot ubnt_unifi-6-lr
  endef
  TARGET_DEVICES += ubnt_unifi-6-lr-ubootmod

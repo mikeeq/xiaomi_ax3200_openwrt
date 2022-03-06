@@ -46,9 +46,9 @@ if [[ ${SKIP_PULL:-false} == false || ! -d ${OPENWRT_GIT_PATH} ]]; then
 
   # inf "Apply namidairo patches to upstream repo"
   # cd "${OPENWRT_GIT_PATH}"
-  # git apply "${PATCH_PATH}"
+  # git apply "${OPENWRT_PATH}"/patchfile
 
-  git apply "${OPENWRT_PATH}"/patchfile
+  git apply "${PATCH_PATH}"
 fi
 
 inf "Add build scripts"

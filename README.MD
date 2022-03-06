@@ -117,7 +117,9 @@ Password:
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
 
-   # Set NVRAM flags
+   # Set NVRAM flags, run commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
+   # nvram set flag_boot_rootfs=0
+   # nvram set "boot_fw1=run boot_rd_img;bootm"
    nvram set flag_boot_success=1
    nvram set flag_try_sys1_failed=0
    nvram set flag_try_sys2_failed=0
@@ -294,54 +296,3 @@ Additional:
 
 - [@namidairo](https://github.com/namidairo) for adding support for AX3200/AX6S in OpenWRT
 - [@thorsten97](https://forum.openwrt.org/u/thorsten97/summary) for building images
-
-```
-# namidairo's build
-Wed Feb 16 02:32:51 2022 kern.notice kernel: [    0.000000] Linux version 5.10.100 (akane@Okinawa-Manjaro) (aarch64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r18245+564-7a48dfc90c) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Wed Feb 16 02:32:49 2022
-```
-
-```
-Fri Mar  4 06:21:26 2022 kern.info kernel: [    0.726228] mtk-snand 1100d000.snfi: chip is F50L1G41LB, size 128MB, page size 2048, oob size 64
-Fri Mar  4 06:21:26 2022 kern.info kernel: [    0.737025] [BBT] BMT.v2 is found at 0x3ff
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.741315] 9 fixed-partitions partitions found on MTD device 1100d000.snfi
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.748297] Creating 9 MTD partitions on "1100d000.snfi":
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.753689] 0x000000000000-0x000000080000 : "Preloader"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.760096] 0x000000080000-0x0000000c0000 : "ATF"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.765450] 0x0000000c0000-0x000000140000 : "u-boot"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.771511] 0x000000140000-0x000000180000 : "u-boot-env"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.777477] 0x000000180000-0x0000001c0000 : "bdata"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.782993] 0x0000001c0000-0x000000240000 : "factory"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.789140] 0x000000240000-0x000000280000 : "crash"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.794658] 0x000000280000-0x0000002c0000 : "crash_log"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    0.800542] 0x0000002c0000-0x0000075c0000 : "firmware"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.001667] 2 fit-fw partitions found on MTD device firmware
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.007330] Creating 2 MTD partitions on "firmware":
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.012287] 0x000000000000-0x0000003a0000 : "kernel"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.023609] 0x0000003a0000-0x000007300000 : "rootfs"
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.217710] mtd: device 10 (rootfs) set to be root filesystem
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.223679] 1 squashfs-split partitions found on MTD device rootfs
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    1.229860] 0x000000880000-0x000007300000 : "rootfs_data"
-```
-
-```
-root@OpenWrt:~# logread | grep -i jffs
-Wed Feb 16 02:32:52 2022 kern.info kernel: [    0.039456] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
-Wed Feb 16 02:32:59 2022 daemon.err mount_root: no jffs2 marker found
-Wed Feb 16 02:33:00 2022 kern.notice kernel: [   20.293433] jffs2: notice: (3135) jffs2_build_xattr_subsystem: complete building xattr subsystem, 8 of xdatum (0 unchecked, 1 orphan) and 9 of xref (1 dead, 0 orphan) found.
-Wed Feb 16 02:33:00 2022 daemon.err mount_root: failed to sync jffs2 overlay
-```
-
-```
-root@OpenWrt:/etc/config# logread | grep -i jffs
-Fri Mar  4 06:21:26 2022 kern.info kernel: [    0.042257] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    7.657186] jffs2: CLEANMARKER node found at 0x00000000 has totlen 0xc != normal 0x0
-Fri Mar  4 06:21:26 2022 kern.warn kernel: [    7.691746] jffs2: Empty flash at 0x000011b4 ends at 0x00001800
-Fri Mar  4 06:21:26 2022 kern.notice kernel: [    9.178666] jffs2: notice: (818) jffs2_build_xattr_subsystem: complete building xattr subsystem, 11 of xdatum (0 unchecked, 3 orphan) and 13 of xref (2 dead, 1 orphan) found.
-Fri Mar  4 06:21:26 2022 user.info kernel: [    9.197593] mount_root: switching to jffs2 overlay
-```
-
-```
-Fri Mar  4 06:21:26 2022 kern.err kernel: [    0.079531] mt-pmic-pwrap 10001000.pwrap: unexpected interrupt int=0x1
-Fri Mar  4 06:21:26 2022 kern.info kernel: [    1.767899] pci 0000:00:00.0: BAR 0: failed to assign [mem size 0x200000000 64bit pref]
-Fri Mar  4 06:21:26 2022 kern.err kernel: [    1.817968] pcieport 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
-```

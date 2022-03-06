@@ -118,9 +118,11 @@ if [[ ${IMAGE_BUILD_ONLY:-false} == false ]]; then
   cp -rfv $(find . | grep bin/targets | grep -i profiles.json) "$ARTIFACTS_PATH/"
   # shellcheck disable=SC2046
   cp -rfv $(find . | grep bin/targets | grep -i sha256sum) "$ARTIFACTS_PATH/"
+  # shellcheck disable=SC2046
+  cp -rfv $(find . | grep bin/targets | grep -i config.buildinfo) "$ARTIFACTS_PATH/"
   cp -rfv "$OPENWRT_PATH"/upstream/.config "$ARTIFACTS_PATH/config.build"
   cp -rfv "$PATCH_PATH" "$ARTIFACTS_PATH/"
-  cp -rfv "$SCRIPT_PATH"/files/config.buildinfo "$ARTIFACTS_PATH/config.buildinfo"
+  cp -rfv "$SCRIPT_PATH"/files/config.build "$ARTIFACTS_PATH/config.buildrepo"
 
   sha256sum "$ARTIFACTS_PATH"/* > "$ARTIFACTS_PATH/sha256sums_artifacts_only"
   exit $build_exitcode

@@ -29,7 +29,6 @@ Password:
 
 - 160Hz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
 - Smaller coverage area/WiFi speeds comparing to stock firmware
-- I wasn't able to flash OpenWRT on recovered via TFTP AX3200 to 1.0.50 FW, I needed to flash my factory firmware 1.0.71, restore default settings (as they were saved from 1.0.50) and then I was able to flash OpenWRT
 
 ## Tutorial: How to install OpenWRT
 
@@ -224,7 +223,7 @@ mtd14: 00500000 00020000 "obr"
 ## OpenWRT /proc/mtd
 
 ```bash
-root@OpenWrt:/# cat /proc/mtd
+root@OpenWrt:~# cat /proc/mtd
 dev:    size   erasesize  name
 mtd0: 00080000 00020000 "Preloader"
 mtd1: 00040000 00020000 "ATF"
@@ -234,10 +233,8 @@ mtd4: 00040000 00020000 "bdata"
 mtd5: 00080000 00020000 "factory"
 mtd6: 00040000 00020000 "crash"
 mtd7: 00040000 00020000 "crash_log"
-mtd8: 07300000 00020000 "firmware"
-mtd9: 003a0000 00020000 "kernel"
-mtd10: 06f60000 00020000 "rootfs"
-mtd11: 06a80000 00020000 "rootfs_data"
+mtd8: 00400000 00020000 "kernel"
+mtd9: 06f00000 00020000 "ubi"
 ```
 
 ## Luci Overview
@@ -248,26 +245,27 @@ mtd11: 06a80000 00020000 "rootfs_data"
 
 ```bash
 ❯ ssh root@192.168.1.1
-BusyBox v1.35.0 (2022-03-01 22:57:40 UTC) built-in shell (ash)
+BusyBox v1.35.0 (2022-03-05 20:06:35 UTC) built-in shell (ash)
 
   _______                     ________        __
- |     | .-----.-----.-----. |  |  |  | .----. |  | _ |
- | --- ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
  |_______||   __|_____|__|__||________||__|  |____|
           |__| W I R E L E S S   F R E E D O M
  -----------------------------------------------------
- OpenWrt SNAPSHOT, r19039-8235723c78
+ OpenWrt SNAPSHOT, r19053-921392e216
  -----------------------------------------------------
 root@OpenWrt:~# df -h
 Filesystem                Size      Used Available Use% Mounted on
-/dev/root                 5.0M      5.0M         0 100% /rom
-tmpfs                   113.9M    236.0K    113.7M   0% /tmp
-tmpfs                   113.9M     72.0K    113.9M   0% /tmp/root
+/dev/root                 5.8M      5.8M         0 100% /rom
+tmpfs                   113.9M    244.0K    113.7M   0% /tmp
+/dev/ubi0_1              89.7M     44.0K     85.0M   0% /overlay
+overlayfs:/overlay       89.7M     44.0K     85.0M   0% /
 tmpfs                   512.0K         0    512.0K   0% /dev
-/dev/mtdblock11         106.5M      2.5M    104.0M   2% /overlay
-overlayfs:/overlay      106.5M      2.5M    104.0M   2% /
 root@OpenWrt:~# dmesg | grep -i xia
 [    0.000000] Machine model: Xiaomi Redmi Router AX6S
+root@OpenWrt:~# dmesg | grep -i mikeeq
+[    0.000000] Linux version 5.10.103 (mikeeq@08bd2e1-droneci) (aarch64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19053-921392e216) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sat Mar 5 20:06:35 2022
 ```
 
 ## Docs

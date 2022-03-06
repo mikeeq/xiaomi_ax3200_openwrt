@@ -27,6 +27,8 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y sudo curl vim gnupg apt-utils
 
+info "Change build version"
+
 # llvm requirements
 # apt-get install -y lsb-release wget software-properties-common
 

@@ -3,7 +3,7 @@ set -eu -o pipefail
 
 opt=${2:-}
 
-if [[ ${BUILD_VERBOSE:-true} == true ]]; then
+if [[ ${BUILD_VERBOSE:-false} == true ]]; then
   DOWNLOAD_VERBOSE="V=sc"
   MAKE_VERBOSE="V=s"
 else

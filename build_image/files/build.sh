@@ -1,6 +1,7 @@
 #!/bin/bash
+set -eu -o pipefail
 
-opt=$2
+opt=${2:-}
 
 if [[ ${BUILD_VERBOSE:-true} == true ]]; then
   DOWNLOAD_VERBOSE="V=sc"
@@ -25,7 +26,7 @@ release=$(grep -m1 '$(VERSION_REPO),' include/version.mk | awk -F, '{ print $3 }
 # wget $release/targets/ramips/mt7621/config.buildinfo -O .config
 # wget $release/targets/mediatek/mt7622/config.buildinfo -O .config
 
-cp -rfv "${CONFIG_PATH}"/build_config.buildinfo ./.config
+cp -rfv "${CONFIG_PATH}"/config.buildinfo ./.config
 
 echo "Set to use default config"
 make defconfig

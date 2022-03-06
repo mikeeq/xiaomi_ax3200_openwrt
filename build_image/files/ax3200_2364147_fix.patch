@@ -405,7 +405,7 @@ index daec843b49..6af0462cc5 100644
 +  DEVICE_DTS := mt7622-xiaomi-redmi-router-ax6s
 +  DEVICE_DTS_DIR := ../dts
 +  DEVICE_PACKAGES := kmod-mt7915e
-+  BOARD_NAME := xiaomi,redmi_router_ax6s
++  BOARD_NAME := xiaomi,redmi-router-ax6s
 +  UBINIZE_OPTS := -E 5
 +  IMAGES += factory.bin
 +  BLOCKSIZE := 128k

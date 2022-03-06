@@ -118,7 +118,7 @@ Password:
    sha256sum *.bin
 
    # Set NVRAM flags
-   # Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
+   ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
    # nvram set flag_boot_rootfs=0
    # nvram set "boot_fw1=run boot_rd_img;bootm"
    nvram set flag_boot_success=1

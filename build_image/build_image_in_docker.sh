@@ -28,6 +28,12 @@ apt-get update
 apt-get install -y sudo curl vim gnupg apt-utils
 
 inf "Change build version"
+if git describe --exact-match --tags HEAD; then
+  OPENWRT_BUILD_VERSION=$(git describe --exact-match --tags HEAD)
+else
+  OPENWRT_BUILD_VERSION=$(git log --pretty=format:'%h' -n 1)
+fi
+sed -i "s/CONFIG_KERNEL_BUILD_DOMAIN=\"droneci\"/CONFIG_KERNEL_BUILD_DOMAIN=\"${OPENWRT_BUILD_VERSION}-droneci\"/" files/config.buildinfo
 
 # llvm requirements
 # apt-get install -y lsb-release wget software-properties-common

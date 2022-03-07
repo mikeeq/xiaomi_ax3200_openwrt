@@ -203,6 +203,27 @@ sysupgrade -u -n sysupgrade.bin
 ## You can also use sysupgrade feature in Luci if you're not upgrading from an image with different partition layout
 ```
 
+### OPKG install packages
+
+If opkg fails due to dns resolution errors you need to add DNS server configuration to internal bridge interface:
+
+```
+root@OpenWrt:~# opkg update
+Downloading https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
+Failed to send request: Operation not permitted
+*** Failed to download the package list from https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
+```
+
+In luci go to interfaces --> interface edit --> advanced settings --> Use custom DNS servers --> Add a custom DNS here
+
+or in cli
+```bash
+# /etc/config/network
+config interface 'lan'
+        option device 'br-lan'
+        list dns '8.8.8.8'
+```
+
 ## Stock /proc/mtd
 
 ```bash

@@ -115,6 +115,7 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i factory
 
    # Set NVRAM flags
    ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
@@ -190,13 +191,17 @@ curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
+curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i sysupgrade
 
 # Flash image
-mtd -r write sysupgrade.bin firmware
-```
+## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))
 
-1. SYSUPGRADE from Luci or via `sysupgrade` CLI command was not tested yet - <https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions>
-2. Restoring default settings was also not tested yet: <https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#soft_factory_reset>
+## If you want to keep configuration
+sysupgrade -u sysupgrade.bin
+## If you want to restore default settings
+sysupgrade -u -n sysupgrade.bin
+## You can also use sysupgrade feature in Luci if you're not upgrading from an image with different partition layout
+```
 
 ## Stock /proc/mtd
 

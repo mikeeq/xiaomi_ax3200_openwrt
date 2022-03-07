@@ -62,7 +62,7 @@ Password:
    ```
 
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
-   >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - [info](https://github.com/YangWang92/AX6S-unlock)
+   >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
 
    - RB03 1.2.7 dev FW (with telnet enabled) has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
 

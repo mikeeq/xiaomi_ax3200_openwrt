@@ -29,7 +29,6 @@ Password:
 
 - 160Hz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
 - Smaller coverage area/WiFi speeds comparing to stock firmware
-- I wasn't able to flash OpenWRT on recovered via TFTP AX3200 to 1.0.50 FW, I needed to flash my factory firmware 1.0.71, restore default settings (as they were saved from 1.0.50) and then I was able to flash OpenWRT
 
 ## Tutorial: How to install OpenWRT
 
@@ -63,7 +62,9 @@ Password:
    ```
 
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
-   >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - [info](https://github.com/YangWang92/AX6S-unlock)
+   >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
+
+   - RB03 1.2.7 dev FW (with telnet enabled) has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
 
 4. Start SSHd on router using telnet
 
@@ -99,7 +100,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220303/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o xiaomi_openwrt_images/sysupgrade.bin
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -114,14 +115,19 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i factory
 
    # Set NVRAM flags
+   ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
+   # nvram set flag_boot_rootfs=0
+   # nvram set "boot_fw1=run boot_rd_img;bootm"
    nvram set flag_boot_success=1
    nvram set flag_try_sys1_failed=0
    nvram set flag_try_sys2_failed=0
+   nvram commit
 
    # Flash image
-   mtd -r write sysupgrade.bin firmware
+   mtd -r write factory.bin firmware
    ```
 
 7. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
@@ -132,13 +138,14 @@ Password:
 
 ## Router debricking
 
-1. Change your NIC IP address to 192.168.4.100 or 192.168.4.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
+1. Change your NIC IP address to 192.168.31.100 or 192.168.31.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
 2. Remember about disabling any firewall on your PC which can block TFTP traffic
 3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
    mkdir -p /tmp/tftp
-   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F02.img
+   # Stock image should be renamed to TFTP server IP address in hex (Eg. C0A81F64.img), 192.168.31.2 - C0A81F02.img, 192.168.31.50 - C0A81F32.img, 192.168.31.100 - C0A81F64.img
+   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F64.img
    # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin
    # To grab URL for stock firmware check http://192.168.31.1/cgi-bin/luci/;stok=<stok>/api/xqsystem/check_rom_update
 
@@ -180,17 +187,21 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220303/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
+curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i sysupgrade
 
 # Flash image
-mtd -r write sysupgrade.bin firmware
-```
+## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))
 
-1. SYSUPGRADE from Luci or via `sysupgrade` CLI command was not tested yet - <https://openwrt.org/docs/guide-user/installation/sysupgrade.cli#command-line_instructions>
-2. Restoring default settings was also not tested yet: <https://openwrt.org/docs/guide-user/troubleshooting/failsafe_and_factory_reset#soft_factory_reset>
+## If you want to keep configuration
+sysupgrade -u sysupgrade.bin
+## If you want to restore default settings
+sysupgrade -u -n sysupgrade.bin
+## You can also use sysupgrade feature in Luci if you're not upgrading from an image with different partition layout
+```
 
 ## Stock /proc/mtd
 
@@ -217,7 +228,7 @@ mtd14: 00500000 00020000 "obr"
 ## OpenWRT /proc/mtd
 
 ```bash
-root@OpenWrt:/# cat /proc/mtd
+root@OpenWrt:~# cat /proc/mtd
 dev:    size   erasesize  name
 mtd0: 00080000 00020000 "Preloader"
 mtd1: 00040000 00020000 "ATF"
@@ -227,10 +238,8 @@ mtd4: 00040000 00020000 "bdata"
 mtd5: 00080000 00020000 "factory"
 mtd6: 00040000 00020000 "crash"
 mtd7: 00040000 00020000 "crash_log"
-mtd8: 07300000 00020000 "firmware"
-mtd9: 003a0000 00020000 "kernel"
-mtd10: 06f60000 00020000 "rootfs"
-mtd11: 06a80000 00020000 "rootfs_data"
+mtd8: 00400000 00020000 "kernel"
+mtd9: 06f00000 00020000 "ubi"
 ```
 
 ## Luci Overview
@@ -241,26 +250,27 @@ mtd11: 06a80000 00020000 "rootfs_data"
 
 ```bash
 ❯ ssh root@192.168.1.1
-BusyBox v1.35.0 (2022-03-01 22:57:40 UTC) built-in shell (ash)
+BusyBox v1.35.0 (2022-03-05 20:06:35 UTC) built-in shell (ash)
 
   _______                     ________        __
- |     | .-----.-----.-----. |  |  |  | .----. |  | _ |
- | --- ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
  |_______||   __|_____|__|__||________||__|  |____|
           |__| W I R E L E S S   F R E E D O M
  -----------------------------------------------------
- OpenWrt SNAPSHOT, r19039-8235723c78
+ OpenWrt SNAPSHOT, r19053-921392e216
  -----------------------------------------------------
 root@OpenWrt:~# df -h
 Filesystem                Size      Used Available Use% Mounted on
-/dev/root                 5.0M      5.0M         0 100% /rom
-tmpfs                   113.9M    236.0K    113.7M   0% /tmp
-tmpfs                   113.9M     72.0K    113.9M   0% /tmp/root
+/dev/root                 5.8M      5.8M         0 100% /rom
+tmpfs                   113.9M    244.0K    113.7M   0% /tmp
+/dev/ubi0_1              89.7M     44.0K     85.0M   0% /overlay
+overlayfs:/overlay       89.7M     44.0K     85.0M   0% /
 tmpfs                   512.0K         0    512.0K   0% /dev
-/dev/mtdblock11         106.5M      2.5M    104.0M   2% /overlay
-overlayfs:/overlay      106.5M      2.5M    104.0M   2% /
 root@OpenWrt:~# dmesg | grep -i xia
 [    0.000000] Machine model: Xiaomi Redmi Router AX6S
+root@OpenWrt:~# dmesg | grep -i mikeeq
+[    0.000000] Linux version 5.10.103 (mikeeq@08bd2e1-droneci) (aarch64-openwrt-linux-musl-gcc (OpenWrt GCC 11.2.0 r19053-921392e216) 11.2.0, GNU ld (GNU Binutils) 2.37) #0 SMP Sat Mar 5 20:06:35 2022
 ```
 
 ## Docs
@@ -274,6 +284,7 @@ Main:
 - <https://github.com/robimarko/openwrt/blob/IPQ807x-5.10-backports/.github/workflows/ipq807x.yaml>
 - <https://github.com/YangWang92/AX6S-unlock>
 - <https://github.com/geekman/xqrepack/>
+- <https://forum.openwrt.org/t/xiaomi-ax3600-install-guide/68273>
 
 Additional:
 

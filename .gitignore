@@ -4,3 +4,4 @@ artifacts
 openwrt
 build.log
 .config
+config.buildinfo

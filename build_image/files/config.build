@@ -29,6 +29,9 @@ CONFIG_KERNEL_BUILD_USER="mikeeq"
 # CONFIG_KERNEL_KALLSYMS is not set
 CONFIG_PACKAGE_cgi-io=y
 CONFIG_PACKAGE_curl=y
+CONFIG_PACKAGE_kmod-macvlan=y
+CONFIG_PACKAGE_kmod-nf-conntrack-netlink=y
+CONFIG_PACKAGE_kmod-wireguard=y
 CONFIG_PACKAGE_libiwinfo-lua=y
 CONFIG_PACKAGE_liblua=y
 CONFIG_PACKAGE_liblucihttp=y

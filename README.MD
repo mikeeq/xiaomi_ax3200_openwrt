@@ -100,7 +100,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -115,7 +115,7 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i factory
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/sha256sums_artifacts_only | grep -i factory
 
    # Set NVRAM flags
    ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
@@ -187,11 +187,11 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
-curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i sysupgrade
+curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/sha256sums_artifacts_only | grep -i sysupgrade
 
 # Flash image
 ## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))
@@ -201,6 +201,28 @@ sysupgrade -u sysupgrade.bin
 ## If you want to restore default settings
 sysupgrade -u -n sysupgrade.bin
 ## You can also use sysupgrade feature in Luci if you're not upgrading from an image with different partition layout
+```
+
+### How to fix OPKG package installation
+
+If OPKG fails due to DNS resolution errors you need to add DNS server configuration to internal bridge interface:
+
+```bash
+# example error
+root@OpenWrt:~# opkg update
+Downloading https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
+Failed to send request: Operation not permitted
+*** Failed to download the package list from https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
+```
+
+In luci go to `interfaces --> interface edit --> advanced settings --> Use custom DNS servers --> Add a custom DNS here`
+
+or in cli
+```bash
+# /etc/config/network
+config interface 'lan'
+        option device 'br-lan'
+        list dns '8.8.8.8'
 ```
 
 ## Stock /proc/mtd

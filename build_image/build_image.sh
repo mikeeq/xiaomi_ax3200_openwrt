@@ -21,7 +21,7 @@ OPENWRT_PATH=${OPENWRT_PATH:-/tmp/openwrt}
 
 OPENWRT_GIT_URL=https://github.com/openwrt/openwrt.git
 OPENWRT_GIT_BRANCH_NAME=master
-OPENWRT_GIT_COMMIT_HASH=34fd5e325af5cbcb64696c9b4b1660f22299790f
+OPENWRT_GIT_COMMIT_HASH=41be1a2de2f84f532a7eb1c11ece99811ca47ba5
 OPENWRT_GIT_PATH=${OPENWRT_PATH}/upstream
 
 # OPENWRT_NAMIDAIRO_GIT_URL=https://github.com/namidairo/openwrt.git

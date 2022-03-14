@@ -203,7 +203,7 @@ sysupgrade -u -n sysupgrade.bin
 ## You can also use sysupgrade feature in Luci if you're not upgrading from an image with different partition layout
 ```
 
-### OPKG install packages
+### How to fix OPKG package installation
 
 If OPKG fails due to DNS resolution errors you need to add DNS server configuration to internal bridge interface:
 

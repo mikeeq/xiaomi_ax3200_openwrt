@@ -205,16 +205,17 @@ sysupgrade -u -n sysupgrade.bin
 
 ### OPKG install packages
 
-If opkg fails due to dns resolution errors you need to add DNS server configuration to internal bridge interface:
+If OPKG fails due to DNS resolution errors you need to add DNS server configuration to internal bridge interface:
 
-```
+```bash
+# example error
 root@OpenWrt:~# opkg update
 Downloading https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
 Failed to send request: Operation not permitted
 *** Failed to download the package list from https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
 ```
 
-In luci go to interfaces --> interface edit --> advanced settings --> Use custom DNS servers --> Add a custom DNS here
+In luci go to `interfaces --> interface edit --> advanced settings --> Use custom DNS servers --> Add a custom DNS here`
 
 or in cli
 ```bash

@@ -100,7 +100,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
+   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -115,7 +115,7 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i factory
+   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/sha256sums_artifacts_only | grep -i factory
 
    # Set NVRAM flags
    ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
@@ -187,11 +187,11 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
-curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220306/sha256sums_artifacts_only | grep -i sysupgrade
+curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/sha256sums_artifacts_only | grep -i sysupgrade
 
 # Flash image
 ## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))

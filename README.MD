@@ -12,11 +12,11 @@ Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and tutori
 | -------------------- | --------------------- | ----- | --------------- | ------ |
 | Xiaomi Router AX3200 | MiWiFi Release 1.0.71 | RB01  | 09/2021         | EU     |
 
-> Xiaomi AX3200 RB01 EU revision should have Telnet enabled from factory
+*Xiaomi AX3200 RB01 EU revision should have Telnet enabled from factory*
 
-```bash
-# Stock RB01 telnet output
-❯ telnet 192.168.31.1
+Stock RB01 telnet output:
+```console
+$ telnet 192.168.31.1
 Trying 192.168.31.1...
 Connected to 192.168.31.1.
 Escape character is '^]'.
@@ -61,8 +61,9 @@ Password:
    # look for telnet_en=1 or "telnet":true
    ```
 
-   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
-   >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
+   CAUTION: If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
+
+   TIP: If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
 
    - RB03 1.2.7 dev FW (with telnet enabled) has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
 
@@ -132,7 +133,7 @@ Password:
 
 7. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
 
-   > If something went wrong make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
+   TIP: If something went wrong, make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
 
 8. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
 
@@ -160,7 +161,7 @@ Password:
    dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
    ```
 
-4. Poweroff your device by pulling out power cord from the device
+4. Power off your device by pulling out power cord from the device
 5. Push the reset button and simultaneously put the power cord back on
 6. Keep pushing the reset button till Power LED will start fast blinking
 7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
@@ -177,7 +178,7 @@ Password:
 
 ### How to upgrade OpenWRT
 
-> I've tried to flash new sysupgrade image with new partition layout on images provided by thorsten97 (with old partition layout) and I bricked my device, so look out!
+WARNING: I've tried to flash new sysupgrade image with new partition layout on images provided by thorsten97 (with old partition layout) and I bricked my device, so look out!
 
 ```bash
 # SSH to OpenWRT flashed router
@@ -207,8 +208,8 @@ sysupgrade -u -n sysupgrade.bin
 
 If OPKG fails due to DNS resolution errors you need to add DNS server configuration to internal bridge interface:
 
-```bash
-# example error
+Example error
+```console
 root@OpenWrt:~# opkg update
 Downloading https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/packages/Packages.gz
 Failed to send request: Operation not permitted
@@ -217,7 +218,7 @@ Failed to send request: Operation not permitted
 
 In luci go to `interfaces --> interface edit --> advanced settings --> Use custom DNS servers --> Add a custom DNS here`
 
-or in cli
+or in CLI
 ```bash
 # /etc/config/network
 config interface 'lan'
@@ -225,9 +226,9 @@ config interface 'lan'
         list dns '8.8.8.8'
 ```
 
-## Stock /proc/mtd
+## Stock `/proc/mtd`
 
-```bash
+```console
 root@XiaoQiang:/tmp/xiaomi_openwrt_images# cat /proc/mtd
 dev:    size   erasesize  name
 mtd0: 00020000 00020000 "PL_Header"
@@ -247,9 +248,9 @@ mtd13: 03200000 00020000 "overlay"
 mtd14: 00500000 00020000 "obr"
 ```
 
-## OpenWRT /proc/mtd
+## OpenWRT `/proc/mtd`
 
-```bash
+```console
 root@OpenWrt:~# cat /proc/mtd
 dev:    size   erasesize  name
 mtd0: 00080000 00020000 "Preloader"
@@ -270,8 +271,8 @@ mtd9: 06f00000 00020000 "ubi"
 
 ## SSH Output from successfully flashed OpenWRT
 
-```bash
-❯ ssh root@192.168.1.1
+```console
+$ ssh root@192.168.1.1
 BusyBox v1.35.0 (2022-03-05 20:06:35 UTC) built-in shell (ash)
 
   _______                     ________        __

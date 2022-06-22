@@ -12,7 +12,7 @@ Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and tutori
 | -------------------- | --------------------- | ----- | --------------- | ------ |
 | Xiaomi Router AX3200 | MiWiFi Release 1.0.71 | RB01  | 09/2021         | EU     |
 
-> Xiaomi AX3200 RB01 EU revision should have Telnet enabled from factory
+> Xiaomi AX3200 RB01 EU revision with production date earlier than 10/2021 should have Telnet enabled from factory, 11/2021 and later produced units usually have Telnet disabled
 
 ```bash
 # Stock RB01 telnet output
@@ -27,10 +27,19 @@ Password:
 
 ### Known Issues
 
-- 160Hz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
+- 160MHz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
+  - <https://github.com/mikeeq/xiaomi_ax3200_openwrt/issues/10#issuecomment-1085959448>
+  - to use 160MHz channel change below settings in 5GHz Wireless Network configuration:
+    - in General Setup select channel to: `64`
+    - in Advanced Settings change country code from `driver default` to `other`
 - Smaller coverage area/WiFi speeds comparing to stock firmware
+  - <https://github.com/openwrt/mt76/issues/657#issue-1182664319>
 
 ## Tutorial: How to install OpenWRT
+
+0. Please use latest official rc/stable release OpenWRT instead - <https://downloads.openwrt.org/>
+   - snapshot builds don't have Luci Web GUI preinstalled
+   - if you choose to use different OpenWRT build than `22.03.0-rc4` please change the URLs in all `curl` commands in the below instructions
 
 1. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
@@ -61,7 +70,7 @@ Password:
    # look for telnet_en=1 or "telnet":true
    ```
 
-   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq) or use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq)
+   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to use UART to boot [OpenWRT initramfs recovery image](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/5135), use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq) or wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq)
    >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
 
    - RB03 1.2.7 dev FW (with telnet enabled) has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
@@ -100,7 +109,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
+   curl -L https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/openwrt-22.03.0-rc4-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -115,7 +124,7 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
-   curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/sha256sums_artifacts_only | grep -i factory
+   curl -Ls https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/sha256sums | grep -i factory | grep -i xiaomi
 
    # Set NVRAM flags
    ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
@@ -160,7 +169,7 @@ Password:
    dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
    ```
 
-4. Poweroff your device by pulling out power cord from the device
+4. Power off your device by pulling out power cord from the device
 5. Push the reset button and simultaneously put the power cord back on
 6. Keep pushing the reset button till Power LED will start fast blinking
 7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
@@ -187,11 +196,11 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/openwrt-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/openwrt-22.03.0-rc4-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
-curl -Ls https://github.com/mikeeq/xiaomi_ax3200_openwrt/releases/download/v20220314/sha256sums_artifacts_only | grep -i sysupgrade
+curl -Ls https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/sha256sums | grep -i sysupgrade | grep -i xiaomi
 
 # Flash image
 ## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))
@@ -201,6 +210,7 @@ sysupgrade -u sysupgrade.bin
 ## If you want to restore default settings
 sysupgrade -u -n sysupgrade.bin
 ## You can also use sysupgrade feature in Luci if you're not upgrading from an image with different partition layout
+### You can safely upgrade your OpenWRT using official release if you already are on the latest release from this project
 ```
 
 ### How to fix OPKG package installation

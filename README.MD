@@ -158,7 +158,12 @@ Password:
 
 3. Connect UART, VCC - 3,3V, remember that RX should go to your UART adapter TX pin, and from device TX to RX on UART adapter
 
-   ![UART](images/ax3200_uart_zoom.jpg)![UART_PHOTO](images/uart_photo.jpg)
+   ![UART](images/ax3200_uart_zoom.jpg)
+   ![UART_PHOTO](images/uart_photo.jpg)
+
+   - I used USB – UART RS232 TTL CH340G adapter, like that
+
+     ![UART_ADAPTER_1](images/ch340g-1.jpg)![UART_ADAPTER_2](images/ch340g-2.jpg)
 
 4. Check on which TTY your UART device is available: `dmesg`
 
@@ -242,7 +247,7 @@ Password:
 
 1. Change your NIC IP address to 192.168.31.100
 2. Remember to disable any firewall on your PC which can block TFTP traffic
-3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
+3. Create TFTP server using `dnsmasq` or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
    mkdir -p /tmp/tftp
@@ -270,10 +275,10 @@ Password:
    ```
 
 4. Power off your device by pulling out power cord from the device
-5. Push the reset button, keep pushing it for 10 seconds and simultaneously put the power cord back on
+5. Push the reset button, keep pushing it and simultaneously put the power cord back on
 6. Release the reset button when Power LED will start fast blinking
 7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by replugging the power cord.
-8. If you upgraded to a different version than you were before update to that specific version, to the latest version or at least do a factory reset after the initial setup if you know that the newest Firmware blocks some features, i.e.: telnet
+8. Please consider doing the Factory Reset if you're planning to stay on that FW
 
 ### Useful links with debricking information
 

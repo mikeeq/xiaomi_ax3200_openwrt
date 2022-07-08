@@ -4,7 +4,7 @@
 
 ## Overview
 
-Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and tutorial how to install it.
+Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and a tutorial on how to install it.
 
 ## Tested HW
 
@@ -12,7 +12,7 @@ Scripts for building an OpenWRT image for Xiaomi Router AX6S / AX3200 and tutori
 | -------------------- | --------------------- | ----- | --------------- | ------ |
 | Xiaomi Router AX3200 | MiWiFi Release 1.0.71 | RB01  | 09/2021         | EU     |
 
-> Xiaomi AX3200 RB01 EU revision with production date earlier than 10/2021 should have Telnet enabled from factory, 11/2021 and later produced units usually have Telnet disabled
+> Xiaomi AX3200 RB01 EU revision with production date earlier than 10/2021 should have Telnet enabled from the factory, 11/2021 and later produced units usually have Telnet disabled
 
 ```bash
 # Stock RB01 telnet output
@@ -29,7 +29,7 @@ Password:
 
 - 160MHz wide 5GHz channels don't work on some clients [source](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/131?u=mikeeq)
   - <https://github.com/mikeeq/xiaomi_ax3200_openwrt/issues/10#issuecomment-1085959448>
-  - to use 160MHz channel change below settings in 5GHz Wireless Network configuration:
+  - to use 160MHz channel change the below settings in 5GHz Wireless Network configuration:
     - in General Setup select channel to: `64`
     - in Advanced Settings change country code from `driver default` to `other`
 - Smaller coverage area/WiFi speeds comparing to stock firmware
@@ -39,7 +39,7 @@ Password:
 
 0. Please use latest official rc/stable release OpenWRT instead - <https://downloads.openwrt.org/>
    - snapshot builds don't have Luci Web GUI preinstalled
-   - if you choose to use different OpenWRT build than `22.03.0-rc4` please change the URLs in all `curl` commands in the below instructions
+   - if you choose to use a different OpenWRT build than `22.03.0-rc5` please change the URLs in all `curl` commands in the below instructions
 
 1. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
@@ -70,10 +70,10 @@ Password:
    # look for telnet_en=1 or "telnet":true
    ```
 
-   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to use UART to boot [OpenWRT initramfs recovery image](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/5135), use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq) or wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq)
+   > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to use UART to boot `OpenWRT initramfs recovery image`, check tutorial [How to flash OpenWRT using UART](#uart-flash), use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq) or wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq)
    >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
-
-   - RB03 1.2.7 dev FW (with telnet enabled) has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
+   - RB03 1.2.7 dev FW (with telnet enabled) `miwifi_rb03_firmware_stable_1.2.7.bin` has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
+   - RB01 1.0.71 INT FW `miwifi_rb01_firmware_bbc77_1.0.71_INT.bin` has `MD5:271f2faa9ae6123c99ab3493fa3bbc77`, `SHA256:0be39ebd244ea2336a3c1d3d9f279fb21fcbc62b836ed36a40d1af6eba01b65b`
 
 4. Start SSHd on router using telnet
 
@@ -109,7 +109,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/openwrt-22.03.0-rc4-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
+   curl -L https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/openwrt-22.03.0-rc5-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -124,7 +124,7 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
-   curl -Ls https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/sha256sums | grep -i factory | grep -i xiaomi
+   curl -Ls https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/sha256sums | grep -i factory | grep -i xiaomi
 
    # Set NVRAM flags
    ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
@@ -145,34 +145,132 @@ Password:
 
 8. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
 
+## UART flash
+
+1. Make sure that you are on RB01 FW 1.0.71 , if not please update using Web Interface [Link](http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin)
+
+   - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Check for updates` button `Update manually`
+     ![Factory Defaults](images/factory_defaults.png)
+
+2. Restore factory defaults by going to the same WebUI page as previously mentioned:
+
+   - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Factory data reset` button `restore`
+
+3. Connect UART, VCC - 3,3V, remember that RX should go to your UART adapter TX pin, and from device TX to RX on UART adapter
+
+   ![UART](images/ax3200_uart_zoom.jpg)![UART_PHOTO](images/uart_photo.jpg)
+
+4. Check on which TTY your UART device is available: `dmesg`
+
+   ```bash
+   dmesg
+
+   [193003.410950] usb 3-4: Product: USB Serial
+   [193003.415983] ch341 3-4:1.0: ch341-uart converter detected
+   [193003.429995] usb 3-4: ch341-uart converter now attached to ttyUSB0
+   ```
+
+5. Open terminal session over serial: `cu -l /dev/ttyUSB0 -s 115200`
+6. Flash two times the same firmware over TFTP (check the tutorial underneath)
+7. After second TFTP flash, during boot time you will have an option to boot to U-Boot console (last option), choose that, now you should see terminal prompt `MT7622>`
+
+8. Now switch the TFTP served image to OpenWRT `initramfs-recovery.itb`
+
+   ``` bash
+   curl -L https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/openwrt-22.03.0-rc5-mediatek-mt7622-xiaomi_redmi-router-ax6s-initramfs-recovery.itb -o /tmp/tftp/C0A81F64.img
+
+   # Close your previous dnsmasq execution and rerun it
+   dnsmasq --no-daemon -i enp9s0 --dhcp-range=192.168.31.1,192.168.31.99 --enable-tftp --tftp-root=/tmp/tftp --dhcp-boot=C0A81F64.img -p0 -K --log-dhcp --bootp-dynamic
+   ```
+
+9. Download the recovery image and boot it
+
+   ```bash
+   MT7622> tftpboot
+   ...
+   Filename 'C0A81F64.img'.
+   Load address: 0x4007ff28
+   ...
+
+   # Execute `boot ${INITRAMFS_ADDRESS}` from tftpboot output and line `Load address: ${INITRAMFS_ADDRESS}`, check the example above
+   MT7622> bootm 0x4007ff28
+   ```
+
+10. After booting OpenWRT, click Enter to see the terminal prompt, download the image using `scp` from your PC to Xiaomi Router and flash it
+
+    ```bash
+    ## On PC
+    mkdir -p /tmp/xiaomi_fw
+    cd /tmp/xiaomi_fw
+
+    # Download image
+    curl -L https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/openwrt-22.03.0-rc5-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+
+    ## Use serial console on router
+    mkdir -p /tmp/images
+    cd /tmp/images
+
+    # 192.168.1.2 - IP of your PC
+    scp 192.168.1.2:/tmp/xiaomi_fw/sysupgrade.bin ./sysupgrade.bin
+
+    # Flash the image using sysupgrade
+    sysupgrade sysupgrade.bin
+
+    reboot
+    ```
+
+11. If you see in Serial Console output that your router stops booting on U-Boot console, boot manually to OpenWRT and set the flag to boot OpenWRT on startup:
+
+    ```bash
+    MT7622> bootmenu
+    # Try first or second entry in bootmenu, click enter to boot
+
+    # In OpenWRT set a flag
+    fw_setenv boot_fw1 "run boot_rd_img;bootm"
+
+    reboot
+    ```
+
+12. If this tutorial wouldn't work for you, check these links:
+
+    - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/513>
+    - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/583>
+
 ## Router debricking
 
-1. Change your NIC IP address to 192.168.31.100 or 192.168.31.50 (that one worked for me and i've only tested the process out on Windows using Xiaomi Recovery Tool)
+1. Change your NIC IP address to 192.168.31.100
 2. Remember about disabling any firewall on your PC which can block TFTP traffic
 3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
    mkdir -p /tmp/tftp
    # Stock image should be renamed to TFTP server IP address in hex (Eg. C0A81F64.img), 192.168.31.2 - C0A81F02.img, 192.168.31.50 - C0A81F32.img, 192.168.31.100 - C0A81F64.img
-   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin -o C0A81F64.img
-   # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin
+   curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin -o C0A81F64.img
+   # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin
    # To grab URL for stock firmware check http://192.168.31.1/cgi-bin/luci/;stok=<stok>/api/xqsystem/check_rom_update
 
    # Check your interface name, in my case it's enp9s0
    ip a
 
    systemctl stop NetworkManager
+   systemctl stop firewalld
+   systemctl stop systemd-resolved.service
+
+   # Check if there's no iptables rules which could block dhcp/tftp traffic (UDP 67, UDP 69)
+   iptables -L
+   # Check if there are no services running on dhcp/tftp ports (UDP 67, UDP 69)
+   netstat -tulpn
 
    ip address flush dev enp9s0
    ip address add 192.168.31.100/24 dev enp9s0
 
-   dnsmasq --no-daemon --listen-address=192.168.31.100 --bind-interfaces --dhcp-range=192.168.31.2,192.168.31.2 --enable-tftp --tftp-root=/tmp/tftp
+   dnsmasq --no-daemon -i enp9s0 --dhcp-range=192.168.31.1,192.168.31.99 --enable-tftp --tftp-root=/tmp/tftp --dhcp-boot=C0A81F64.img -p0 -K --log-dhcp --bootp-dynamic
    ```
 
 4. Power off your device by pulling out power cord from the device
-5. Push the reset button and simultaneously put the power cord back on
-6. Keep pushing the reset button till Power LED will start fast blinking
-7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by repluging power cord.
+5. Push the reset button, keep pushing it for 10 seconds and simultaneously put the power cord back on
+6. Release the reset button when Power LED will start fast blinking
+7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by replugging power cord.
 8. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
 
 ### Useful links with debricking information
@@ -196,11 +294,11 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/openwrt-22.03.0-rc4-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/openwrt-22.03.0-rc5-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
-curl -Ls https://downloads.openwrt.org/releases/22.03.0-rc4/targets/mediatek/mt7622/sha256sums | grep -i sysupgrade | grep -i xiaomi
+curl -Ls https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/sha256sums | grep -i sysupgrade | grep -i xiaomi
 
 # Flash image
 ## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))

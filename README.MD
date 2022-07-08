@@ -62,7 +62,7 @@ Password:
    curl -L https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/script.sh -o ./script.sh
    curl -L https://raw.githubusercontent.com/mikeeq/xiaomi_ax3200_openwrt/main/password.py -o ./password.py
 
-   # Replace <STOK> with the session token grabbed from the login URL after initial setup
+   # Replace <STOK> with the session token grabbed from the login URL after the initial setup
    ## http://192.168.31.1/cgi-bin/luci/;stok=1675d313f8c5d384e191b653c44c5e3a/web/home#router
    ### i.e.: STOK="1675d313f8c5d384e191b653c44c5e3a" bash script.sh
    STOK="<STOK>" bash script.sh
@@ -78,7 +78,7 @@ Password:
 4. Start SSHd on router using telnet
 
    ```bash
-   # Create telnet terminal session, use TELNET_PASSWORD from script output from previous point
+   # Create telnet terminal session, use TELNET_PASSWORD from script output from the previous point
    telnet 192.168.31.1
 
    # Enable SSH
@@ -91,7 +91,7 @@ Password:
 
    # Set password for root user, `echo -e “<PASSWORD>/n<PASSWORD>” | passwd root` didn't work for me
    passwd root
-   # After changing root password it will be persistent change even after restart, so if you'll be trying to telnet after reboot use this password instead of generated one from above
+   # After changing root password it will be a persistent change even after restart, so if you'll be trying to telnet after reboot use this password instead of generated one from above
 
    # Start SSHd (dropbear)
    /etc/init.d/dropbear enable
@@ -172,7 +172,7 @@ Password:
 
 5. Open terminal session over serial: `cu -l /dev/ttyUSB0 -s 115200`
 6. Flash two times the same firmware over TFTP (check the tutorial underneath)
-7. After second TFTP flash, during boot time you will have an option to boot to U-Boot console (last option), choose that, now you should see terminal prompt `MT7622>`
+7. After the second TFTP flash, during boot time you will have an option to boot to U-Boot console (last option), choose that, now you should see terminal prompt `MT7622>`
 
 8. Now switch the TFTP served image to OpenWRT `initramfs-recovery.itb`
 
@@ -239,7 +239,7 @@ Password:
 ## Router debricking
 
 1. Change your NIC IP address to 192.168.31.100
-2. Remember about disabling any firewall on your PC which can block TFTP traffic
+2. Remember to disable any firewall on your PC which can block TFTP traffic
 3. Create tftp server or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
@@ -270,8 +270,8 @@ Password:
 4. Power off your device by pulling out power cord from the device
 5. Push the reset button, keep pushing it for 10 seconds and simultaneously put the power cord back on
 6. Release the reset button when Power LED will start fast blinking
-7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by replugging power cord.
-8. If you upgraded to a different version than you were before update to it/to the latest version or at least do a factory reset after initial setup if you know that newest FW blocks some features, i.e.: telnet
+7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by replugging the power cord.
+8. If you upgraded to a different version than you were before update to that specific version, to the latest version or at least do a factory reset after the initial setup if you know that the newest Firmware blocks some features, i.e.: telnet
 
 ### Useful links with debricking information
 
@@ -284,7 +284,7 @@ Password:
 
 ### How to upgrade OpenWRT
 
-> I've tried to flash new sysupgrade image with new partition layout on images provided by thorsten97 (with old partition layout) and I bricked my device, so look out!
+> I've tried to flash a new sysupgrade image with new partition layout on images provided by thorsten97 (with the old partition layout) and I bricked my device, so look out!
 
 ```bash
 # SSH to OpenWRT flashed router

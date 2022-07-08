@@ -172,7 +172,7 @@ Password:
 
 5. Open terminal session over serial: `cu -l /dev/ttyUSB0 -s 115200`
 6. Flash two times the same firmware over TFTP (check the tutorial [underneath](#router-debricking) (bash commands for running TFTP server using dnsmasq))
-7. After the second TFTP flash, during boot time you will have an option to boot to U-Boot console (last option), choose that, now you should see terminal prompt `MT7622>`
+7. After the second TFTP flash, during the boot time you will have an option to boot to U-Boot Console (last option in bootmenu), choose that, now you should be able to see the terminal prompt `MT7622>`
 
 8. Now switch the TFTP served image to OpenWRT `initramfs-recovery.itb`
 
@@ -206,7 +206,7 @@ Password:
     # Download image
     curl -L https://downloads.openwrt.org/releases/22.03.0-rc5/targets/mediatek/mt7622/openwrt-22.03.0-rc5-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
-    ## Use serial console on router
+    ## Use serial console on router, or SSH
     mkdir -p /tmp/images
     cd /tmp/images
 

@@ -171,7 +171,7 @@ Password:
    ```
 
 5. Open terminal session over serial: `cu -l /dev/ttyUSB0 -s 115200`
-6. Flash two times the same firmware over TFTP (check the tutorial underneath)
+6. Flash two times the same firmware over TFTP (check the tutorial [underneath](#router-debricking) (bash commands for running TFTP server using dnsmasq))
 7. After the second TFTP flash, during boot time you will have an option to boot to U-Boot console (last option), choose that, now you should see terminal prompt `MT7622>`
 
 8. Now switch the TFTP served image to OpenWRT `initramfs-recovery.itb`

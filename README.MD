@@ -174,6 +174,8 @@ Password:
 6. Flash two times the same firmware over TFTP (check the tutorial [underneath](#router-debricking) (bash commands for running TFTP server using dnsmasq))
 7. After the second TFTP flash, during the boot time you will have an option to boot to U-Boot Console (last option in bootmenu), choose that, now you should be able to see the terminal prompt `MT7622>`
 
+   - If you don't see the bootmenu make sure that you have serial session opened before you start the router
+
 8. Now switch the TFTP served image to OpenWRT `initramfs-recovery.itb`
 
    ``` bash
@@ -183,7 +185,7 @@ Password:
    dnsmasq --no-daemon -i enp9s0 --dhcp-range=192.168.31.1,192.168.31.99 --enable-tftp --tftp-root=/tmp/tftp --dhcp-boot=C0A81F64.img -p0 -K --log-dhcp --bootp-dynamic
    ```
 
-9. Download the recovery image and boot it
+9.  Download the recovery image and boot it
 
    ```bash
    MT7622> tftpboot
@@ -196,7 +198,7 @@ Password:
    MT7622> bootm 0x4007ff28
    ```
 
-10. After booting OpenWRT, click Enter to see the terminal prompt, download the image using `scp` from your PC to Xiaomi Router and flash it
+11. After booting OpenWRT, click Enter to see the terminal prompt, download the image using `scp` from your PC to Xiaomi Router and flash it
 
     ```bash
     ## On PC
@@ -219,7 +221,7 @@ Password:
     reboot
     ```
 
-11. If you see in Serial Console output that your router stops booting on U-Boot console, boot manually to OpenWRT and set the flag to boot OpenWRT on startup:
+12. If you see in Serial Console output that your router stops booting on U-Boot console, boot manually to OpenWRT and set the flag to boot OpenWRT on startup:
 
     ```bash
     MT7622> bootmenu
@@ -231,7 +233,7 @@ Password:
     reboot
     ```
 
-12. If this tutorial wouldn't work for you, check these links:
+13. If this tutorial wouldn't work for you, check these links:
 
     - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/513>
     - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/583>

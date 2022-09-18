@@ -176,7 +176,7 @@ Password:
    ```
 
 5. Open terminal session over serial: `cu -l /dev/ttyUSB0 -s 115200`
-6. Flash two times the same firmware over TFTP (check the tutorial [underneath](#router-debricking) (bash commands for running TFTP server using dnsmasq))
+6. Flash two times the same stock firmware (I've used RB01 FW 1.0.71) over TFTP (check the tutorial [underneath](#router-debricking) (bash commands for running TFTP server using dnsmasq))
 7. After the second TFTP flash, during the boot time you will have an option to boot to U-Boot Console (last option in bootmenu), choose that, now you should be able to see the terminal prompt `MT7622>`
 
    - If you don't see the bootmenu make sure that you have serial session opened before you start the router

@@ -295,7 +295,7 @@ Password:
 
 ```bash
 # SSH to OpenWRT flashed router
-ssh 192.168.1.1
+ssh root@192.168.1.1
 
 mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw

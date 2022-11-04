@@ -71,6 +71,7 @@ Password:
    ```
 
    > If `telnet_en=0` or `"telnet": false`, then telnet is not enabled on your device by default and you need to use UART to boot `OpenWRT initramfs recovery image`, check tutorial [How to flash OpenWRT using UART](#uart-flash), use [CH341A programmer](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/151?u=mikeeq) or wait for the [exploit](https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/74?u=mikeeq)
+   >> CAUTION! USE AT YOUR OWN RISK! I HAVEN'T TESTED THAT METHOD! There's now a new way of enabling SSH on RB01, RB06, RB08 revisions mentioned here - <https://forum.openwrt.org/t/adding-openwrt-support-for-xiaomi-redmi-router-ax6s-xiaomi-router-ax3200/111085/938>
    >> If you're using `RB03` there could be a chance to downgrade your FW to development version and maybe that process will enable the telnet on your device - <https://github.com/YangWang92/AX6S-unlock>
    - RB03 1.2.7 dev FW (with telnet enabled) `miwifi_rb03_firmware_stable_1.2.7.bin` has `MD5: 5eedf1632ac97bb5a6bb072c08603ed7`, `SHA256: 9c80425987fb8d2f8c5f59a7234b795c0990db9147b42f6ad69dc2f76e6a2c11`
    - RB01 1.0.71 INT FW `miwifi_rb01_firmware_bbc77_1.0.71_INT.bin` has `MD5:271f2faa9ae6123c99ab3493fa3bbc77`, `SHA256:0be39ebd244ea2336a3c1d3d9f279fb21fcbc62b836ed36a40d1af6eba01b65b`
@@ -156,7 +157,7 @@ Password:
 
    - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Factory data reset` button `restore`
 
-3. Connect UART, VCC - 3,3V, remember that RX should go to your UART adapter TX pin, and from device TX to RX on UART adapter
+3. Connect UART, VCC - 3,3V, remember that RX should go to your UART adapter TX pin, and from device TX to RX on UART adapter (if you want to connect wires without opening the case, you need to remove the plastic tips from cables ends which go to the router)
 
    ![UART](images/ax3200_uart_zoom.jpg)
    ![UART_PHOTO](images/uart_photo.jpg)

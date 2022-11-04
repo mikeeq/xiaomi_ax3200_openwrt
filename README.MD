@@ -39,7 +39,7 @@ Password:
 
 0. Please use latest official rc/stable release OpenWRT instead - <https://downloads.openwrt.org/>
    - snapshot builds don't have Luci Web GUI preinstalled
-   - if you choose to use a different OpenWRT build than `22.03.0` please change the URLs in all `curl` commands in the below instructions
+   - if you choose to use a different OpenWRT build than `22.03.2` please change the URLs in all `curl` commands in the below instructions
 
 1. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
@@ -109,7 +109,7 @@ Password:
    mkdir -p xiaomi_openwrt_images
 
    # Download images from Internet
-   curl -L https://downloads.openwrt.org/releases/22.03.0/targets/mediatek/mt7622/openwrt-22.03.0-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
+   curl -L https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/openwrt-22.03.2-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-factory.bin -o xiaomi_openwrt_images/factory.bin
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
@@ -124,7 +124,7 @@ Password:
 
    # Validate those checksums against checksums found in github releases file sha256sums_artifacts_only
    sha256sum *.bin
-   curl -Ls https://downloads.openwrt.org/releases/22.03.0/targets/mediatek/mt7622/sha256sums | grep -i factory | grep -i xiaomi
+   curl -Ls https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/sha256sums | grep -i factory | grep -i xiaomi
 
    # Set NVRAM flags
    ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
@@ -184,7 +184,7 @@ Password:
 8. Now switch the TFTP served image to OpenWRT `initramfs-recovery.itb`
 
    ``` bash
-   curl -L https://downloads.openwrt.org/releases/22.03.0/targets/mediatek/mt7622/openwrt-22.03.0-mediatek-mt7622-xiaomi_redmi-router-ax6s-initramfs-recovery.itb -o /tmp/tftp/C0A81F64.img
+   curl -L https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/openwrt-22.03.2-mediatek-mt7622-xiaomi_redmi-router-ax6s-initramfs-recovery.itb -o /tmp/tftp/C0A81F64.img
 
    # Close your previous dnsmasq execution and rerun it
    dnsmasq --no-daemon -i enp9s0 --dhcp-range=192.168.31.1,192.168.31.99 --enable-tftp --tftp-root=/tmp/tftp --dhcp-boot=C0A81F64.img -p0 -K --log-dhcp --bootp-dynamic
@@ -211,7 +211,7 @@ Password:
     cd /tmp/xiaomi_fw
 
     # Download image
-    curl -L https://downloads.openwrt.org/releases/22.03.0/targets/mediatek/mt7622/openwrt-22.03.0-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+    curl -L https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/openwrt-22.03.2-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
     ## Use serial console on router, or SSH
     mkdir -p /tmp/images
@@ -301,11 +301,11 @@ mkdir -p /tmp/xiaomi_fw
 cd /tmp/xiaomi_fw
 
 # Download image
-curl -L https://downloads.openwrt.org/releases/22.03.0/targets/mediatek/mt7622/openwrt-22.03.0-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
+curl -L https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/openwrt-22.03.2-mediatek-mt7622-xiaomi_redmi-router-ax6s-squashfs-sysupgrade.bin -o ./sysupgrade.bin
 
 # Validate checksums against checksums found in github releases file sha256sums_artifacts_only
 sha256sum *.bin
-curl -Ls https://downloads.openwrt.org/releases/22.03.0/targets/mediatek/mt7622/sha256sums | grep -i sysupgrade | grep -i xiaomi
+curl -Ls https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/sha256sums | grep -i sysupgrade | grep -i xiaomi
 
 # Flash image
 ## If you are coming from other partition layout (check changelog) use mtd flash command instead of sysupgrade from tutorial above (and you will also need to download another image (factory.bin in this case))

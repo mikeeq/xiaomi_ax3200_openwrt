@@ -114,6 +114,12 @@ Password:
 
    # Copy images over SSH to router
    scp -r xiaomi_openwrt_images root@192.168.31.1:/tmp/
+
+   ## If your factory firmware doesn't have sftp-server installed use command below
+   ### ash: /usr/libexec/sftp-server: not found
+   ### scp: Connection closed
+   ssh root@192.168.31.1 "mkdir -p /tmp/xiaomi_openwrt_images"
+   cat xiaomi_openwrt_images/factory.bin | base64 -w0 | ssh root@192.168.31.1 "cat | base64 -d > /tmp/xiaomi_openwrt_images/factory.bin"
    ```
 
 6. Validate sha256 checksums and flash OpenWRT

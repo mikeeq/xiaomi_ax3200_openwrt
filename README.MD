@@ -163,7 +163,7 @@ Password:
 
    - Go to `System update` by clicking on your device name in the upper right-hand corner --> Click under `Factory data reset` button `restore`
 
-3. Connect UART, VCC - 3,3V, remember that RX should go to your UART adapter TX pin, and from device TX to RX on UART adapter (if you want to connect wires without opening the case, you need to remove the plastic tips from cables ends which go to the router)
+3. Connect UART, remember that RX should go to your UART adapter TX pin, and from device TX to RX on UART adapter (if you want to connect wires without opening the case, you need to remove the plastic tips from cables ends which go to the router) Only 3 cables (TX , RX , GND) is enough to connect. Do not connect VCC cable.
 
    ![UART](images/ax3200_uart_zoom.jpg)
    ![UART_PHOTO](images/uart_photo.jpg)
@@ -192,6 +192,8 @@ Password:
 
    ``` bash
    curl -L https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/openwrt-22.03.2-mediatek-mt7622-xiaomi_redmi-router-ax6s-initramfs-recovery.itb -o /tmp/tftp/C0A81F64.img
+   
+   # If you are on a mac, and if not already installed install dnsmasq using brew with: brew install dnsmasq
 
    # Close your previous dnsmasq execution and rerun it
    dnsmasq --no-daemon -i enp9s0 --dhcp-range=192.168.31.1,192.168.31.99 --enable-tftp --tftp-root=/tmp/tftp --dhcp-boot=C0A81F64.img -p0 -K --log-dhcp --bootp-dynamic
@@ -282,7 +284,7 @@ Password:
    ```
 
 4. Power off your device by pulling out power cord from the device
-5. Push the reset button, keep pushing it and simultaneously put the power cord back on
+5. Push the reset button (reset button is not the button on the router, it's the one with the hole push it with a pin), keep pushing it and simultaneously put the power cord back on
 6. Release the reset button when Power LED will start fast blinking
 7. After successful tftp recovery flash Power LED will start blinking in blue colour, then you can safely restart your router by replugging the power cord.
 8. Please consider doing the Factory Reset if you're planning to stay on that FW

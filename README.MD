@@ -40,6 +40,7 @@ Password:
 0. Please use latest official rc/stable release OpenWRT instead - <https://downloads.openwrt.org/>
    - snapshot builds don't have Luci Web GUI preinstalled
    - if you choose to use a different OpenWRT build than `22.03.2` please change the URLs in all `curl` commands in the below instructions
+   - please check latest docs on: <https://openwrt.org/toh/xiaomi/ax3200#installation>
 
 1. I recommend restoring router settings to factory defaults, before installing OpenWRT
 
@@ -100,6 +101,15 @@ Password:
 
    # Test SSH connection, for authentication use password set earlier
    ssh root@192.168.31.1
+
+   # If fails with an error ssh_dispatch_run_fatal: Connection to 192.168.31.1 port 22: error in libcrypto
+   ssh -o KexAlgorithms=+diffie-hellman-group1-sha1 -o HostKeyAlgorithms=+ssh-rsa 192.168.31.1 -l root
+
+   # If it still fails then
+   sudo update-crypto-policies --set LEGACY
+   ssh root@192.168.31.1
+   sudo update-crypto-policies --set DEFAULT
+
    # cat /proc/mtd
    ```
 
@@ -134,9 +144,9 @@ Password:
    curl -Ls https://downloads.openwrt.org/releases/22.03.2/targets/mediatek/mt7622/sha256sums | grep -i factory | grep -i xiaomi
 
    # Set NVRAM flags
-   ## Run also first commented two lines if after flashing sysupgrade.bin image router restarts to stock firmware instead of OpenWRT
-   # nvram set flag_boot_rootfs=0
-   # nvram set "boot_fw1=run boot_rd_img;bootm"
+   nvram set ssh_en=1
+   nvram set uart_en=1
+   nvram set boot_wait=on
    nvram set flag_boot_success=1
    nvram set flag_try_sys1_failed=0
    nvram set flag_try_sys2_failed=0
@@ -146,11 +156,62 @@ Password:
    mtd -r write factory.bin firmware
    ```
 
-7. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
+7. ⚠️ Warning: Newer international models may softbrick (orange LED only) after 6 reboots post-install due to a bootloader change. TFTP debricking is required to recover.
+
+    ```bash
+    ssh root@192.168.1.1
+
+    fw_setenv boot_fw1 "run boot_rd_img;bootm"
+    fw_setenv flag_try_sys1_failed 8
+    fw_setenv flag_try_sys2_failed 8
+    fw_setenv flag_boot_rootfs 0
+    fw_setenv flag_boot_success 1
+    fw_setenv flag_last_success 1
+
+    reboot
+
+    ssh root@192.168.1.1
+
+    fw_printenv | grep -i flag_try_sys
+    #flag_try_sys1_failed=9
+    #flag_try_sys2_failed=8
+    ```
+
+8. After running last command `mtd write -r` router should automatically reboot and after it gets up you can open <http://192.168.1.1> in the browser and try to login (default password is blank/empty) and set root password here: <http://192.168.1.1/cgi-bin/luci/admin/system/admin>
 
    > If something went wrong make sure that first you've tried to restart your NIC to grab fresh IP from DHCP and it's from 192.168.1.0/24 subnet range
 
-8. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
+9. If you're sure that you've bricked your device there's a recovery TFTP mode to [restore stock firmware](#Router-debricking)
+
+## “netmode: 4” method
+
+```
+# Based on: https://openwrt.org/toh/xiaomi/ax3200#installation
+
+# Follow steps from ##Tutorial: How to install OpenWRT steps 1-3. to grab script.sh
+
+# Make sure you are in xiaomi_openwrt directory
+
+curl -L https://gist.githubusercontent.com/jmceleney/33c626a33960ac8a1764614cf57420cd/raw/2426919fcf6a06f6c24b03faae9dd805bf50b4f0/xiaomi-enable-mesh-telnet.py -O
+python xiaomi-enable-mesh-telnet.py
+
+export STOK="<STOK>"
+curl "http://192.168.31.1/cgi-bin/luci/;stok=${STOK}/api/xqnetwork/get_netmode"
+
+curl "http://192.168.31.1/cgi-bin/luci/;stok=${STOK}/api/misystem/set_sys_time?timezone=%20%27%20%3B%20zz%3D%24%28dd%20if%3D%2Fdev%2Fzero%20bs%3D1%20count%3D2%202%3E%2Fdev%2Fnull%29%20%3B%20printf%20%27%A5%5A%25c%25c%27%20%24zz%20%24zz%20%7C%20mtd%20write%20-%20crash%20%3B%20"
+# Reboot
+curl "http://192.168.31.1/cgi-bin/luci/;stok=${STOK}$/api/xqsystem/reboot?client=web"
+
+# New token after reboot
+export STOK="<STOK>"
+curl "http://192.168.31.1/cgi-bin/luci/;stok=${STOK}/api/misystem/set_sys_time?timezone=%20%27%20%3B%20bdata%20set%20telnet_en%3D1%20%3B%20bdata%20set%20ssh_en%3D1%20%3B%20bdata%20set%20uart_en%3D1%20%3B%20bdata%20commit%20%3B%20"
+curl "http://192.168.31.1/cgi-bin/luci/;stok=${STOK}/api/misystem/set_sys_time?timezone=%20%27%20%3b%20mtd%20erase%20crash%20%3b%20"
+
+bash script.sh
+telnet 192.168.31.1
+
+# Proceed with steps from ##Tutorial: How to install OpenWRT steps 4-8.
+```
 
 ## UART flash
 
@@ -257,7 +318,9 @@ Password:
 3. Create TFTP server using `dnsmasq` or use [Xiaomi Recovery Tool](https://forum.openwrt.org/t/xiaomi-mi-router-4a-gigabit-edition-r4ag-r4a-gigabit-fully-supported-and-flashable-with-openwrtinvasion/36685/747?u=mikeeq)
 
    ```bash
+   sudo -i
    mkdir -p /tmp/tftp
+   cd /tmp/tftp
    # Stock image should be renamed to TFTP server IP address in hex (Eg. C0A81F64.img), 192.168.31.2 - C0A81F02.img, 192.168.31.50 - C0A81F32.img, 192.168.31.100 - C0A81F64.img
    curl -Ls http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_bbc77_1.0.71_INT.bin -o C0A81F64.img
    # http://cdn.awsde0-fusion.fds.api.mi-img.com/xiaoqiang/rom/rb01/miwifi_rb01_firmware_36352_1.0.50_INT.bin
